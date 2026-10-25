@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=DaxSheet Spreadsheet Pro
+Comment=Spreadsheet & Analisis Data Terintegrasi
+Exec=doffice sheet
+Icon=org.daxos.sheet
+Terminal=false
+Categories=Office;Spreadsheet;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.sheet
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

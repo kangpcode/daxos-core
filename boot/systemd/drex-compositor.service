@@ -1,0 +1,25 @@
+[Unit]
+Description=DAXOS Wayland Acrylic Glass Dynamic Compositor
+Documentation=file:///home/kangpcode/wwwsite/daxos/docs/FASE_6_BAGIAN_5_WAYLAND_BOOST_TRANSLASI_AB.md
+After=drex-boostd.service dap-registryd.service
+Requires=dap-registryd.service
+BindsTo=graphical-session.target
+
+[Service]
+Type=notify
+Slice=daxos-system.slice
+ExecStart=/usr/bin/drex-compositor --config /etc/daxos/compositor.conf --enable-acrylic-blur
+Restart=on-failure
+RestartSec=100ms
+TimeoutStopSec=3s
+
+# High Priority Display Compositing
+CPUSchedulingPolicy=rr
+CPUSchedulingPriority=90
+LimitMEMLOCK=infinity
+Environment=XDG_CURRENT_DESKTOP=DAXOS
+Environment=WAYLAND_DISPLAY=wayland-1
+PAMName=daxos-compositor
+
+[Install]
+WantedBy=graphical.target

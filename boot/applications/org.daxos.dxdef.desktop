@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=DXDEF Security Center
+Comment=Pusat Keamanan, Landlock LSM & Hardware Firewall
+Exec=dxdef-cli
+Icon=org.daxos.dxdef
+Terminal=false
+Categories=System;Security;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.dxdef
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

@@ -1,0 +1,15 @@
+[package]
+name = "drex-sdk"
+version = "1.10.2026"
+edition = "2021"
+authors = ["Dhafa Nazula Permadi <kangpcode>"]
+description = "DAXOS DreXSDK Official Software Development Kit & Anti-Crash Runtime"
+
+[dependencies]
+drex-ui = { path = "../drex-ui" }
+drexvis = { path = "../drexvis" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha3 = "0.10"
+ed25519-dalek = { version = "2.1", default-features = false, features = ["fast", "rand_core"] }
+rand = "0.8"

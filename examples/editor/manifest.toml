@@ -1,0 +1,37 @@
+[application]
+icon = "icon.svg"
+bundle_identifier = "org.daxos.editor"
+display_name = "DAXOS Pro Text Editor (dEdit)"
+version = "1.0.0"
+build_number = 1
+minimum_os_version = "1.0.0"
+
+[developer]
+id = "dev-daxos-core"
+legal_name = "DAXOS Core Engineering Group"
+
+[sandbox]
+enforce = true
+network_isolation = "strict"
+
+[permissions]
+required = [
+    "daxos.permission.FILE_SYSTEM_USER",
+    "daxos.permission.GPU_ACCELERATION"
+]
+optional = []
+
+[resources]
+max_memory_mb = 256
+max_cpu_percent = 50
+max_file_descriptors = 1024
+
+[landlock_paths]
+read_write = [
+    "~",
+    "/tmp"
+]
+read_only = [
+    "/usr/share/fonts",
+    "/etc"
+]

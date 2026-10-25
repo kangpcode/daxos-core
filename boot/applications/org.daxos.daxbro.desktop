@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=DaXBro Web Browser
+Comment=Browser Modern Cepat & Aman Berbasis Chromium
+Exec=daxbro
+Icon=org.daxos.daxbro
+Terminal=false
+Categories=Network;WebBrowser;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.daxbro
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

@@ -1,0 +1,16 @@
+[package]
+name = "dax-bro"
+version = "1.10.2026"
+edition = "2021"
+authors = ["Dhafa Nazula Permadi <kangpcode>"]
+description = "Chromium-based High Performance Browser Engine and CLI for DAXOS"
+
+[[bin]]
+name = "dbro"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha3 = "0.10"
+

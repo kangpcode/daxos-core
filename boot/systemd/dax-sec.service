@@ -1,0 +1,23 @@
+[Unit]
+Description=DAXOS Security Center and Hardware Firewall Daemon
+Documentation=man:dxdef-cli(1)
+After=network.target dap-registryd.service
+PartOf=daxos.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Slice=daxos-system.slice
+ExecStart=/usr/bin/dxdef-cli status
+StandardOutput=journal
+StandardError=journal
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_RAW CAP_SYS_ADMIN
+AmbientCapabilities=CAP_NET_ADMIN
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/lib/daxos /tmp
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=daxos.target

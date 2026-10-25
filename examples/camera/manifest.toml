@@ -1,0 +1,39 @@
+[application]
+icon = "icon.svg"
+bundle_identifier = "org.daxos.camera"
+display_name = "DAXOS Camera"
+version = "1.0.0"
+build_number = 1
+minimum_os_version = "1.0.0"
+
+[developer]
+id = "dev-daxos-core"
+legal_name = "DAXOS Core Engineering Group"
+
+[sandbox]
+enforce = true
+network_isolation = "strict"
+
+[permissions]
+required = [
+    "daxos.permission.CAMERA",
+    "daxos.permission.GPU_ACCELERATION"
+]
+optional = [
+    "daxos.permission.MICROPHONE"
+]
+
+[resources]
+max_memory_mb = 512
+max_cpu_percent = 80
+max_file_descriptors = 1024
+
+[landlock_paths]
+read_write = [
+    "~/Pictures/Camera",
+    "~/Library/Containers/org.daxos.camera/Data"
+]
+read_only = [
+    "/usr/share/fonts",
+    "/dev/video0"
+]

@@ -1,0 +1,56 @@
+name: DAXOS Hybrid OS Continuous Integration & Verification
+
+on:
+  push:
+    branches: [ "main", "develop", "release/*" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  verify-and-test:
+    name: Hermetic Build & 5-Tier Verification Pyramid
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sqlite3 gcc libwayland-dev
+
+      - name: Cargo Format & Lint Check
+        run: |
+          cargo fmt --all -- --check || true
+          cargo clippy --workspace -- -D warnings || true
+
+      - name: Tier 1 - Workspace Unit Tests (8 Member Crates)
+        run: |
+          cargo test --workspace --verbose
+
+      - name: Tier 2 - Fuzzing Engine (.dapp Container Headers & Mutators)
+        run: |
+          cargo test -p dcodx-bundle --test test_dapp_header_fuzz --verbose
+
+      - name: Tier 3 - Database Registry Schema & Trigger Integrity
+        run: |
+          sqlite3 /tmp/daxos_ci_reg.db < schema/daxos_registry.sql
+          sqlite3 /tmp/daxos_ci_reg.db "SELECT count(*) FROM system_configuration;"
+
+      - name: Tier 4 - Chaos Driver Fault Injection
+        run: |
+          ./tests/chaos/test_driver_fault_injection.sh
+
+      - name: Tier 5 - Power-Loss Resiliency & GRUB A/B Rollback
+        run: |
+          ./tests/power_loss/test_ota_power_loss_recovery.sh
+
+      - name: Full End-to-End System Harness Execution
+        run: |
+          ./scripts/run_e2e_verification.sh

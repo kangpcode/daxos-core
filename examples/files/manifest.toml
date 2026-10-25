@@ -1,0 +1,39 @@
+[application]
+icon = "icon.svg"
+bundle_identifier = "org.daxos.files"
+display_name = "DAXOS Files"
+version = "1.0.0"
+build_number = 1
+minimum_os_version = "1.0.0"
+
+[developer]
+id = "dev-daxos-core"
+legal_name = "DAXOS Core Engineering Group"
+
+[sandbox]
+enforce = true
+network_isolation = "strict"
+
+[permissions]
+required = [
+    "daxos.permission.FILE_SYSTEM_USER",
+    "daxos.permission.GPU_ACCELERATION"
+]
+optional = [
+    "daxos.permission.EXTERNAL_STORAGE"
+]
+
+[resources]
+max_memory_mb = 512
+max_cpu_percent = 60
+max_file_descriptors = 2048
+
+[landlock_paths]
+read_write = [
+    "~",
+    "/tmp"
+]
+read_only = [
+    "/usr/share",
+    "/etc"
+]

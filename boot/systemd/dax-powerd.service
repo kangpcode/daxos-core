@@ -1,0 +1,27 @@
+# ==============================================================================
+# DAXOS SYSTEMD SERVICE: HARDWARE POWER & BATTERY GOVERNOR (dax-powerd)
+# File: boot/systemd/dax-powerd.service
+# ==============================================================================
+[Unit]
+Description=DAXOS Hardware Power Governor, ACPI & Battery Subsystem Daemon
+Documentation=man:daxsh(1)
+After=drex-boostd.service dap-registryd.service
+PartOf=daxos.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Slice=daxos-system.slice
+ExecStart=/usr/bin/daxsh -c "boost balanced"
+StandardOutput=journal
+StandardError=journal
+
+# Security Sandboxing
+ProtectSystem=strict
+ProtectHome=yes
+CapabilityBoundingSet=CAP_SYS_ADMIN CAP_SYS_BOOT
+NoNewPrivileges=yes
+MemoryDenyWriteExecute=yes
+
+[Install]
+WantedBy=daxos.target

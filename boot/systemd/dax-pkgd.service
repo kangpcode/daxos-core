@@ -1,0 +1,31 @@
+# ==============================================================================
+# DAXOS SYSTEMD SERVICE: PACKAGE REGISTRY & UPDATE SUPERVISOR (dax-pkgd)
+# File: boot/systemd/dax-pkgd.service
+# ==============================================================================
+[Unit]
+Description=DAXOS Native Package Registry & Repository Sync Daemon (dax-pkgd)
+Documentation=man:dax(1)
+After=network.target dap-registryd.service
+Requires=dap-registryd.service
+PartOf=daxos.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Slice=daxos-system.slice
+ExecStart=/usr/bin/dax stats
+StandardOutput=journal
+StandardError=journal
+
+# Security Sandboxing
+User=root
+Group=root
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/lib/daxos /tmp /run
+CapabilityBoundingSet=CAP_DAC_OVERRIDE CAP_CHOWN
+NoNewPrivileges=yes
+MemoryDenyWriteExecute=yes
+
+[Install]
+WantedBy=daxos.target

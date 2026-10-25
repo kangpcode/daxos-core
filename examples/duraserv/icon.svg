@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="duraBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="50%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="serverBlade" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#duraBg)" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+  
+  <!-- Server Blade 1 (Top / Web Proxy) -->
+  <rect x="24" y="26" width="80" height="20" rx="5" fill="url(#serverBlade)" stroke="rgba(56,189,248,0.4)" stroke-width="1.5"/>
+  <circle cx="34" cy="36" r="3" fill="#38BDF8" filter="url(#glow)"/>
+  <circle cx="43" cy="36" r="3" fill="#34D399"/>
+  <line x1="56" y1="36" x2="94" y2="36" stroke="#64748B" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Server Blade 2 (Middle / Runtimes) -->
+  <rect x="24" y="52" width="80" height="20" rx="5" fill="url(#serverBlade)" stroke="rgba(52,211,153,0.4)" stroke-width="1.5"/>
+  <circle cx="34" cy="62" r="3" fill="#34D399" filter="url(#glow)"/>
+  <circle cx="43" cy="62" r="3" fill="#F59E0B"/>
+  <line x1="56" y1="62" x2="94" y2="62" stroke="#64748B" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Server Blade 3 (Bottom / Databases) -->
+  <rect x="24" y="78" width="80" height="20" rx="5" fill="url(#serverBlade)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5"/>
+  <circle cx="34" cy="88" r="3" fill="#F59E0B" filter="url(#glow)"/>
+  <circle cx="43" cy="88" r="3" fill="#38BDF8"/>
+  <line x1="56" y1="88" x2="94" y2="88" stroke="#64748B" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Fast Lightning / Connectivity Indicator -->
+  <polygon points="66,16 60,34 68,34 62,48 76,30 68,30" fill="#FDE047" opacity="0.95" filter="url(#glow)"/>
+</svg>

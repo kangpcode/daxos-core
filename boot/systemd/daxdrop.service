@@ -1,0 +1,23 @@
+[Unit]
+Description=DAXOS DaXDrop P2P Discovery and Air-Gesture Sharing Engine
+Documentation=man:daxdrop(1)
+After=network.target dap-registryd.service
+PartOf=daxos.target
+
+[Service]
+Type=simple
+Slice=daxos-system.slice
+ExecStart=/usr/bin/daxdrop status
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_SYS_RESOURCE
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/lib/daxos /tmp /run
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=daxos.target

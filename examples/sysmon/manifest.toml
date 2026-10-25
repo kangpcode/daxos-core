@@ -1,0 +1,40 @@
+[application]
+icon = "icon.svg"
+bundle_identifier = "org.daxos.sysmon"
+display_name = "DAXOS Activity Monitor & Task Manager"
+version = "1.0.0"
+build_number = 1
+minimum_os_version = "1.0.0"
+
+[developer]
+id = "dev-daxos-core"
+legal_name = "DAXOS Core Engineering Group"
+
+[sandbox]
+enforce = true
+network_isolation = "strict"
+
+[permissions]
+required = [
+    "daxos.permission.SYSTEM_TELEMETRY",
+    "daxos.permission.PROCESS_MANAGEMENT",
+    "daxos.permission.GPU_ACCELERATION"
+]
+optional = [
+    "daxos.permission.HARDWARE_GOVERNOR"
+]
+
+[resources]
+max_memory_mb = 256
+max_cpu_percent = 40
+max_file_descriptors = 512
+
+[landlock_paths]
+read_write = [
+    "~/Library/Containers/org.daxos.sysmon/Data"
+]
+read_only = [
+    "/proc",
+    "/sys",
+    "/usr/share/fonts"
+]

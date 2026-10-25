@@ -1,0 +1,25 @@
+# ==============================================================================
+# DAXOS SYSTEMD PRESET: DEFAULT ENABLED UNITS
+# File: boot/systemd/50-daxos.preset
+# ==============================================================================
+enable daxos.target
+enable dap-registryd.service
+enable dap-registryd.socket
+enable dap-sandboxd.service
+enable dap-sandboxd.socket
+enable dap-updated.service
+enable drex-boostd.service
+enable drex-compositor.service
+enable dax-sysmon.service
+enable dax-netd.service
+enable dax-sec.service
+enable dax-audiod.service
+enable dax-disks.service
+enable daxdrop.service
+enable dap-compat.service
+enable dax-pkgd.service
+enable dax-powerd.service
+enable dax-bluetoothd.service
+enable daxos-kernel-modules.service
+enable duraserv.service
+enable daxos-autostart.service

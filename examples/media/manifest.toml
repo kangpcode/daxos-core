@@ -1,0 +1,41 @@
+[application]
+icon = "icon.svg"
+bundle_identifier = "org.daxos.media"
+display_name = "DAXOS Music & Spatial Audio"
+version = "1.0.0"
+build_number = 1
+minimum_os_version = "1.0.0"
+
+[developer]
+id = "dev-daxos-core"
+legal_name = "DAXOS Core Engineering Group"
+
+[sandbox]
+enforce = true
+network_isolation = "strict"
+
+[permissions]
+required = [
+    "daxos.permission.AUDIO_HARDWARE",
+    "daxos.permission.GPU_ACCELERATION",
+    "daxos.permission.FILE_SYSTEM_USER"
+]
+optional = [
+    "daxos.permission.SPATIAL_AUDIO"
+]
+
+[resources]
+max_memory_mb = 384
+max_cpu_percent = 50
+max_file_descriptors = 512
+
+[landlock_paths]
+read_write = [
+    "~/Library/Containers/org.daxos.media/Data",
+    "~/Music"
+]
+read_only = [
+    "/proc/asound",
+    "/usr/share/sounds",
+    "/usr/share/fonts"
+]

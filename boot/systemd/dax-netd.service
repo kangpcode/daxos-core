@@ -1,0 +1,24 @@
+[Unit]
+Description=DAXOS Network and Wireless Manager Daemon
+Documentation=man:dnet(1)
+Wants=network.target
+Before=network.target
+PartOf=daxos.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Slice=daxos-system.slice
+ExecStart=/usr/bin/dnet status
+StandardOutput=journal
+StandardError=journal
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_RAW
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/lib/daxos /run /etc/resolv.conf
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=daxos.target

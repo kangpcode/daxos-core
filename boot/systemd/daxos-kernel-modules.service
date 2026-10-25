@@ -1,0 +1,29 @@
+# ==============================================================================
+# DAXOS SYSTEMD SERVICE: KERNEL MODULES & HARDWARE ROOT-OF-TRUST INITIALIZER
+# File: boot/systemd/daxos-kernel-modules.service
+# ==============================================================================
+[Unit]
+Description=DAXOS DXU Hybrid Kernel Modules & In-Kernel Primitives Loader
+Documentation=file:///home/kangpcode/wwwsite/daxos/kernel/README.md
+DefaultDependencies=no
+Before=sysinit.target drex-boostd.service dap-registryd.service
+ConditionPathExists=/lib/modules
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Slice=daxos-drivers.slice
+ExecStart=/bin/sh -c '\
+  modprobe -q daxos_ntsync || insmod /usr/lib/modules/$(uname -r)/daxos_ntsync.ko 2>/dev/null || true; \
+  modprobe -q daxos_boost  || insmod /usr/lib/modules/$(uname -r)/daxos_boost.ko 2>/dev/null || true; \
+  modprobe -q daxos_sec    || insmod /usr/lib/modules/$(uname -r)/daxos_sec.ko 2>/dev/null || true; \
+  [ -e /dev/ntsync ] && chmod 0666 /dev/ntsync || true; \
+  [ -e /dev/daxos_boost ] && chmod 0666 /dev/daxos_boost || true; \
+  [ -e /dev/daxos_sec ] && chmod 0660 /dev/daxos_sec || true; \
+  [ -e /proc/daxos/sched_boost ] && echo "240hz_boost=1" > /proc/daxos/sched_boost 2>/dev/null || true; \
+  echo "[daxos-kernel-modules] In-kernel DXU Hybrid primitives initialized successfully."'
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=sysinit.target

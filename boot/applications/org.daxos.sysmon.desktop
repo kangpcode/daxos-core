@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=Activity Monitor
+Comment=Pemantau CPU, GPU, Memori & Proses Realtime
+Exec=dtop
+Icon=org.daxos.sysmon
+Terminal=false
+Categories=System;Monitor;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.sysmon
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

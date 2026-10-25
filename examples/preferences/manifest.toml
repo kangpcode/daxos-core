@@ -1,0 +1,38 @@
+[application]
+icon = "icon.svg"
+bundle_identifier = "org.daxos.preferences"
+display_name = "DAXOS System Preferences"
+version = "1.0.0"
+build_number = 1
+minimum_os_version = "1.0.0"
+
+[developer]
+id = "dev-daxos-core"
+legal_name = "DAXOS Core Engineering Group"
+
+[sandbox]
+enforce = true
+network_isolation = "strict"
+
+[permissions]
+required = [
+    "daxos.permission.GPU_ACCELERATION",
+    "daxos.permission.AUDIO_HARDWARE"
+]
+optional = [
+    "daxos.permission.UPDATE_SYSTEM"
+]
+
+[resources]
+max_memory_mb = 256
+max_cpu_percent = 60
+max_file_descriptors = 1024
+
+[landlock_paths]
+read_write = [
+    "~/Library/Containers/org.daxos.preferences/Data"
+]
+read_only = [
+    "/usr/share/fonts",
+    "/var/lib/daxos"
+]

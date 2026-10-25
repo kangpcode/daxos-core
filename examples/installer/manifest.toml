@@ -1,0 +1,40 @@
+[application]
+icon = "icon.svg"
+bundle_identifier = "org.daxos.installer"
+display_name = "Install DAXOS"
+version = "1.0.0"
+build_number = 1
+minimum_os_version = "1.0.0"
+
+[developer]
+id = "dev-daxos-core"
+legal_name = "DAXOS Core Engineering Group"
+
+[sandbox]
+enforce = false
+network_isolation = "none"
+
+[permissions]
+required = [
+    "daxos.permission.DISK_PARTITIONING",
+    "daxos.permission.SYSTEM_INSTALL",
+    "daxos.permission.SECURITY_TPM"
+]
+optional = [
+    "daxos.permission.NETWORK_SOCKET"
+]
+
+[resources]
+max_memory_mb = 2048
+max_cpu_percent = 100
+max_file_descriptors = 8192
+
+[landlock_paths]
+read_write = [
+    "/dev",
+    "/mnt",
+    "/tmp"
+]
+read_only = [
+    "/"
+]

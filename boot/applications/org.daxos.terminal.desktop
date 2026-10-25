@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=DAXOS Terminal
+Comment=Shell Interaktif daxsh POSIX & Multi-OS CLI
+Exec=daxsh
+Icon=org.daxos.terminal
+Terminal=false
+Categories=System;TerminalEmulator;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.terminal
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

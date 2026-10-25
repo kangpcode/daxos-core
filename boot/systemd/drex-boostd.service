@@ -1,0 +1,23 @@
+[Unit]
+Description=DAXOS Dynamic Hardware & GPU Governor (drex-boostd)
+Documentation=file:///home/kangpcode/wwwsite/daxos/docs/FASE_6_BAGIAN_5_WAYLAND_BOOST_TRANSLASI_AB.md
+After=drex-driver.service
+Before=graphical.target
+
+[Service]
+Type=simple
+Slice=daxos-system.slice
+ExecStart=/usr/bin/drex-boostd --socket /run/daxos/boost.sock --sampling-rate-ms 10
+Restart=always
+RestartSec=50ms
+
+# Realtime Scheduling Priority
+CPUSchedulingPolicy=rr
+CPUSchedulingPriority=85
+Nice=-20
+CapabilityBoundingSet=CAP_SYS_NICE CAP_SYS_RAWIO
+ProtectHome=yes
+ProtectSystem=strict
+
+[Install]
+WantedBy=graphical.target

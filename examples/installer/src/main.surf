@@ -1,0 +1,218 @@
+// ============================================================================
+// DAXOS SYSTEM GUI INSTALLER WIZARD
+// File: examples/installer/src/main.surf
+// Language: Surflang 1.0 (Declarative DreXUI Component)
+// Lead Architect: Dhafa Nazula Permadi (@kangpcode)
+// Strictly ZERO EMOJIS - Production Grade
+// ============================================================================
+
+module daxos.installer;
+
+component InstallerApp: Component {
+    @State var currentStep: Int = 1; // 1: Welcome, 2: Disk Selection, 3: User Setup, 4: Installing, 5: Complete
+    @State var targetDisk: String = "/dev/nvme0n1 (512 GB NVMe PCIe 5.0 SSD)";
+    @State var username: String = "kangpcode";
+    @State var enableTpmEncryption: Bool = true;
+    @State var installProgress: Float = 0.0;
+    @State var statusMessage: String = "Ready to install DAXOS production image.";
+    @State var acrylicBlur: Float = 36.0;
+
+    func advanceStep() {
+        if currentStep < 5 {
+            currentStep = currentStep + 1;
+            if currentStep == 4 {
+                startInstallation();
+            }
+        }
+    }
+
+    func previousStep() {
+        if currentStep > 1 && currentStep < 4 {
+            currentStep = currentStep - 1;
+        }
+    }
+
+    func startInstallation() {
+        statusMessage = "Formatting A/B partition slots with DAX-FS & XTS-AES-256...";
+        installProgress = 25.0;
+    }
+
+    func body() -> ViewNode {
+        return Card {
+            VStack(spacing: 0) {
+                // macOS Style Header Bar
+                HStack(spacing: 12) {
+                    HStack(spacing: 6) {
+                        Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FF5F56")
+                        Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FFBD2E")
+                        Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#27C93F")
+                    }
+                    .padding(6)
+
+                    Text("DAXOS System Setup Assistant")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundColor("#E2E8F0")
+
+                    Spacer()
+
+                    // Step Indicator Pills
+                    HStack(spacing: 6) {
+                        Text(currentStep == 1 ? "[1. WELCOME]" : "1. Welcome")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundColor(currentStep == 1 ? "#00D2FF" : "#64748B")
+                        Text(currentStep == 2 ? "[2. DISK]" : "2. Disk")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundColor(currentStep == 2 ? "#00D2FF" : "#64748B")
+                        Text(currentStep == 3 ? "[3. USER]" : "3. User")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundColor(currentStep == 3 ? "#00D2FF" : "#64748B")
+                        Text(currentStep == 4 ? "[4. INSTALL]" : "4. Install")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundColor(currentStep == 4 ? "#00D2FF" : "#64748B")
+                        Text(currentStep == 5 ? "[5. DONE]" : "5. Done")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundColor(currentStep == 5 ? "#30D158" : "#64748B")
+                    }
+                }
+                .padding(14)
+                .backgroundColor("#1E1E28")
+
+                // Step Body (Dynamic View by Step)
+                Box {
+                    VStack(spacing: 24) {
+                        if currentStep == 1 {
+                            // Step 1: Welcome
+                            VStack(spacing: 14) {
+                                Text("[DAXOS HYBRID-RING]")
+                                    .font(.system(size: 14, weight: .bold))
+                                    .foregroundColor("#00D2FF")
+                                Text("Welcome to DAXOS")
+                                    .font(.system(size: 26, weight: .bold))
+                                    .foregroundColor("#FFFFFF")
+                                Text("Darwinian Architecture eXperience Operating System\nVersion 1.10.2026 'Rhino' (x86_64 Hardened Universal Media)\nEquipped with DreXUI, Landlock LSM v5, and Atomic A/B OTA.")
+                                    .font(.system(size: 13))
+                                    .foregroundColor("#94A3B8")
+                            }
+                        } else if currentStep == 2 {
+                            // Step 2: Disk Selection
+                            VStack(spacing: 14) {
+                                Text("Select Destination Storage Disk")
+                                    .font(.system(size: 20, weight: .bold))
+                                    .foregroundColor("#FFFFFF")
+                                Text("DAXOS will configure dual A/B root slots (32GB each) and EFI Partition.")
+                                    .font(.system(size: 13))
+                                    .foregroundColor("#94A3B8")
+
+                                Box {
+                                    HStack {
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text(targetDisk)
+                                                .font(.system(size: 14, weight: .semibold))
+                                                .foregroundColor("#FFFFFF")
+                                            Text("Partition Table: GPT | Encryption: XTS-AES-256 + TPM 2.0")
+                                                .font(.system(size: 11))
+                                                .foregroundColor("#94A3B8")
+                                        }
+                                        Spacer()
+                                        Text("SELECTED")
+                                            .font(.system(size: 11, weight: .bold))
+                                            .foregroundColor("#00D2FF")
+                                    }
+                                    .padding(16)
+                                }
+                                .cornerRadius(10)
+                                .backgroundColor("#252838")
+                            }
+                        } else if currentStep == 3 {
+                            // Step 3: User Setup
+                            VStack(spacing: 14) {
+                                Text("Create Administrator Account")
+                                    .font(.system(size: 20, weight: .bold))
+                                    .foregroundColor("#FFFFFF")
+                                Text("Default Administrator: kangpcode (Sudo & Landlock supervisor enabled)")
+                                    .font(.system(size: 13))
+                                    .foregroundColor("#94A3B8")
+
+                                Box {
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        HStack {
+                                            Text("Username:")
+                                                .font(.system(size: 13))
+                                                .foregroundColor("#94A3B8")
+                                            Text(username)
+                                                .font(.system(size: 13, weight: .bold))
+                                                .foregroundColor("#FFFFFF")
+                                        }
+                                        HStack {
+                                            Text("Security Enclave:")
+                                                .font(.system(size: 13))
+                                                .foregroundColor("#94A3B8")
+                                            Text("TPM 2.0 PCR Sealing Active")
+                                                .font(.system(size: 13, weight: .bold))
+                                                .foregroundColor("#30D158")
+                                        }
+                                    }
+                                    .padding(16)
+                                }
+                                .cornerRadius(10)
+                                .backgroundColor("#252838")
+                            }
+                        } else if currentStep == 4 {
+                            // Step 4: Installation Progress
+                            VStack(spacing: 16) {
+                                Text("Installing DAXOS System...")
+                                    .font(.system(size: 22, weight: .bold))
+                                    .foregroundColor("#FFFFFF")
+                                Text(statusMessage)
+                                    .font(.system(size: 13))
+                                    .foregroundColor("#00D2FF")
+
+                                // Progress Bar
+                                Box {
+                                    Box().frame(width: 340, height: 8).cornerRadius(4).backgroundColor("#00D2FF")
+                                }
+                                .frame(width: 440, height: 8)
+                                .cornerRadius(4)
+                                .backgroundColor("#2C2D3B")
+                            }
+                        } else {
+                            // Step 5: Completed
+                            VStack(spacing: 14) {
+                                Text("[VERIFIED INSTALL]")
+                                    .font(.system(size: 14, weight: .bold))
+                                    .foregroundColor("#30D158")
+                                Text("Installation Complete!")
+                                    .font(.system(size: 24, weight: .bold))
+                                    .foregroundColor("#FFFFFF")
+                                Text("DAXOS is successfully staged to Slot A. Please reboot into your new system.")
+                                    .font(.system(size: 14))
+                                    .foregroundColor("#94A3B8")
+                            }
+                        }
+
+                        // Navigation Buttons (Back & Continue without overlapping)
+                        HStack {
+                            if currentStep > 1 && currentStep < 4 {
+                                Button(title: "Back", action: { previousStep() })
+                                    .buttonStyle(.secondary)
+                            }
+                            Spacer()
+                            if currentStep < 4 {
+                                Button(title: "Continue", action: { advanceStep() })
+                                    .buttonStyle(.accent)
+                            } else if currentStep == 4 {
+                                Button(title: "Finish Setup", action: { currentStep = 5 })
+                                    .buttonStyle(.accent)
+                            } else {
+                                Button(title: "Restart System", action: { })
+                                    .buttonStyle(.primary)
+                            }
+                        }
+                    }
+                    .padding(32)
+                }
+                .glassEffect(opacity: 0.88, blurRadius: acrylicBlur, edgeBrightness: 1.1, noise: 0.02)
+            }
+        };
+    }
+}

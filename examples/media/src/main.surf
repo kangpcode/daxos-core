@@ -1,0 +1,164 @@
+// ============================================================================
+// DAXOS MUSIC & SPATIAL AUDIO PLAYER (dMedia GUI)
+// File: examples/media/src/main.surf
+// Language: Surflang 1.0 (Declarative DreXUI Component)
+// Lead Architect: Dhafa Nazula Permadi (@kangpcode)
+// Strictly ZERO EMOJIS - Production Grade
+// ============================================================================
+
+module daxos.media;
+
+component MediaApp: Component {
+    @State var currentTrack: String = "Resonance - Symphonic Glass";
+    @State var currentArtist: String = "DAXOS Audio Laboratory";
+    @State var isPlaying: Bool = true;
+    @State var masterVolumePct: Int = 80;
+    @State var spatialAudioEnabled: Bool = true;
+    @State var selectedEqPreset: String = "Acoustic Clarity";
+    @State var outputDevice: String = "HDA-Intel (Realtek ALC287) Low Latency";
+    @State var bufferLatencyMs: Float = 5.8;
+    @State var playbackProgress: Float = 0.42;
+    @State var acrylicBlur: Float = 36.0;
+
+    func togglePlayback() {
+        isPlaying = !isPlaying;
+    }
+
+    func setPreset(preset: String) {
+        selectedEqPreset = preset;
+    }
+
+    func body() -> ViewNode {
+        return Card {
+            VStack(spacing: 0) {
+                // Window Chrome & Titlebar
+                Box {
+                    HStack(spacing: 12) {
+                        HStack(spacing: 6) {
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FF5F56")
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FFBD2E")
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#27C93F")
+                        }
+                        .padding(6)
+
+                        Text("DAXOS DaxMedia Suite — Lossless & Spatial DSP")
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundColor("#FFFFFF")
+
+                        Spacer()
+
+                        Text("HRTF Binaural 3D Audio")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundColor(spatialAudioEnabled ? "#30D158" : "#888899")
+
+                        Button(title: spatialAudioEnabled ? "Spatial ON" : "Spatial OFF", action: { spatialAudioEnabled = !spatialAudioEnabled })
+                            .buttonStyle(spatialAudioEnabled ? .accent : .glass)
+                    }
+                    .padding(10)
+                }
+                .glassEffect(opacity: 0.85, blurRadius: 20.0, edgeBrightness: 1.1, noise: 0.02)
+
+                // Now Playing Hero Pane
+                Box {
+                    HStack(spacing: 20) {
+                        // Album Art Glass Pod
+                        Box {
+                            VStack {
+                                Spacer()
+                                Text("DAX-AUDIO")
+                                    .font(.system(size: 11, weight: .bold))
+                                    .foregroundColor("#00D2FF")
+                                Spacer()
+                            }
+                        }
+                        .frame(width: 110, height: 110)
+                        .cornerRadius(16)
+                        .backgroundColor("#1E2235")
+                        .border(1, "#38BDF8")
+
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(currentTrack)
+                                .font(.system(size: 18, weight: .bold))
+                                .foregroundColor("#FFFFFF")
+                            Text(currentArtist)
+                                .font(.system(size: 13))
+                                .foregroundColor("#00D2FF")
+                            Text("Output: " + outputDevice)
+                                .font(.system(size: 11))
+                                .foregroundColor("#888899")
+                            Text("PipeWire Hardware MMAP Latency: " + String(bufferLatencyMs) + " ms")
+                                .font(.system(size: 11, weight: .semibold))
+                                .foregroundColor("#30D158")
+
+                            // Playback Progress Bar
+                            VStack(spacing: 4) {
+                                HStack {
+                                    Text("01:42").font(.system(size: 10)).foregroundColor("#94A3B8")
+                                    Spacer()
+                                    Text("03:58").font(.system(size: 10)).foregroundColor("#94A3B8")
+                                }
+                                Box().frame(height: 4).cornerRadius(2).backgroundColor("#007AFF")
+                            }
+                            .padding(4)
+
+                            // Media Transport Controls (Strictly Zero Emojis)
+                            HStack(spacing: 12) {
+                                Button(title: "PREV", action: { }).buttonStyle(.glass)
+                                Button(title: isPlaying ? "PAUSE" : "PLAY", action: { togglePlayback() }).buttonStyle(.accent)
+                                Button(title: "NEXT", action: { }).buttonStyle(.glass)
+                                Spacer()
+                                Text("Volume: " + String(masterVolumePct) + "%").font(.system(size: 11)).foregroundColor("#CCCCCC")
+                            }
+                            .padding(6)
+                        }
+                        Spacer()
+                    }
+                    .padding(16)
+                }
+                .glassEffect(opacity: 0.75, blurRadius: acrylicBlur, edgeBrightness: 1.05, noise: 0.02)
+
+                // 10-Band Graphic Equalizer Section
+                Box {
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack {
+                            Text("10-Band Master Parametric Equalizer (PipeWire DSP)")
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundColor("#FFFFFF")
+                            Spacer()
+                            Text("Preset: " + selectedEqPreset)
+                                .font(.system(size: 11, weight: .semibold))
+                                .foregroundColor("#FF9F0A")
+                        }
+
+                        // Equalizer Sliders Representation
+                        HStack(spacing: 14) {
+                            VStack(spacing: 4) { Box().frame(width: 8, height: 48).cornerRadius(4).backgroundColor("#00D2FF"); Text("31Hz").font(.system(size: 9)).foregroundColor("#888888") }
+                            VStack(spacing: 4) { Box().frame(width: 8, height: 56).cornerRadius(4).backgroundColor("#00D2FF"); Text("62Hz").font(.system(size: 9)).foregroundColor("#888888") }
+                            VStack(spacing: 4) { Box().frame(width: 8, height: 64).cornerRadius(4).backgroundColor("#00D2FF"); Text("125Hz").font(.system(size: 9)).foregroundColor("#888888") }
+                            VStack(spacing: 4) { Box().frame(width: 8, height: 40).cornerRadius(4).backgroundColor("#00D2FF"); Text("250Hz").font(.system(size: 9)).foregroundColor("#888888") }
+                            VStack(spacing: 4) { Box().frame(width: 8, height: 52).cornerRadius(4).backgroundColor("#00D2FF"); Text("500Hz").font(.system(size: 9)).foregroundColor("#888888") }
+                            VStack(spacing: 4) { Box().frame(width: 8, height: 60).cornerRadius(4).backgroundColor("#00D2FF"); Text("1kHz").font(.system(size: 9)).foregroundColor("#888888") }
+                            VStack(spacing: 4) { Box().frame(width: 8, height: 68).cornerRadius(4).backgroundColor("#00D2FF"); Text("2kHz").font(.system(size: 9)).foregroundColor("#888888") }
+                            VStack(spacing: 4) { Box().frame(width: 8, height: 72).cornerRadius(4).backgroundColor("#00D2FF"); Text("4kHz").font(.system(size: 9)).foregroundColor("#888888") }
+                            VStack(spacing: 4) { Box().frame(width: 8, height: 80).cornerRadius(4).backgroundColor("#00D2FF"); Text("8kHz").font(.system(size: 9)).foregroundColor("#888888") }
+                            VStack(spacing: 4) { Box().frame(width: 8, height: 76).cornerRadius(4).backgroundColor("#00D2FF"); Text("16kHz").font(.system(size: 9)).foregroundColor("#888888") }
+                            Spacer()
+                        }
+                        .padding(8)
+
+                        // Equalizer Presets Picker
+                        HStack(spacing: 8) {
+                            Button(title: "Flat", action: { setPreset(preset: "Flat") }).buttonStyle(.glass)
+                            Button(title: "Bass Boost", action: { setPreset(preset: "Bass Boost") }).buttonStyle(.glass)
+                            Button(title: "Acoustic Clarity", action: { setPreset(preset: "Acoustic Clarity") }).buttonStyle(.accent)
+                            Button(title: "Spatial Immersion", action: { setPreset(preset: "Spatial Immersion") }).buttonStyle(.glass)
+                            Spacer()
+                        }
+                    }
+                    .padding(14)
+                }
+                .glassEffect(opacity: 0.8, blurRadius: 24.0, edgeBrightness: 1.0, noise: 0.02)
+            }
+        };
+    }
+}

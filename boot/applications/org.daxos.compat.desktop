@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=DAXOS Universal Runner
+Comment=Lapisan Kompatibilitas Windows, macOS & Linux
+Exec=dax-run
+Icon=org.daxos.compat
+Terminal=false
+Categories=System;Emulator;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.compat
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

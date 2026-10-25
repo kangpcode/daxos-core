@@ -1,0 +1,154 @@
+// ============================================================================
+// DAXOS STORE (DAPSTORE) APPLICATION
+// File: examples/store/src/main.surf
+// Language: Surflang 1.0 (Declarative DreXUI Component)
+// Lead Architect: Dhafa Nazula Permadi (@kangpcode)
+// Strictly ZERO EMOJIS - Production Grade
+// ============================================================================
+
+module daxos.dapstore;
+
+component DapstoreApp: Component {
+    @State var selectedCategory: String = "Discover";
+    @State var searchKeyword: String = "";
+    @State var acrylicBlur: Float = 28.0;
+
+    func filterCategory(cat: String) {
+        selectedCategory = cat;
+    }
+
+    func body() -> ViewNode {
+        return Card {
+            HStack(spacing: 0) {
+                // macOS App Store Sidebar
+                Box {
+                    VStack(alignment: .leading, spacing: 14) {
+                        HStack(spacing: 6) {
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FF5F56")
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FFBD2E")
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#27C93F")
+                        }
+                        .padding(8)
+
+                        Text("DapStore")
+                            .font(.system(size: 16, weight: .bold))
+                            .foregroundColor("#FFFFFF")
+
+                        VStack(alignment: .leading, spacing: 6) {
+                            Button(title: "Discover", action: { filterCategory(cat: "Discover") })
+                                .buttonStyle(selectedCategory == "Discover" ? .sidebarActive : .sidebar)
+                            Button(title: "Development", action: { filterCategory(cat: "Development") })
+                                .buttonStyle(selectedCategory == "Development" ? .sidebarActive : .sidebar)
+                            Button(title: "Internet & Tools", action: { filterCategory(cat: "Internet & Tools") })
+                                .buttonStyle(selectedCategory == "Internet & Tools" ? .sidebarActive : .sidebar)
+                            Button(title: "Security & System", action: { filterCategory(cat: "Security & System") })
+                                .buttonStyle(selectedCategory == "Security & System" ? .sidebarActive : .sidebar)
+                            Button(title: "Updates", action: { filterCategory(cat: "Updates") })
+                                .buttonStyle(selectedCategory == "Updates" ? .sidebarActive : .sidebar)
+                        }
+
+                        Spacer()
+
+                        Text("DAXOS Package Hub\nSigned & Landlock Verified")
+                            .font(.system(size: 9))
+                            .foregroundColor("#7E7E94")
+                    }
+                    .padding(14)
+                }
+                .frame(width: 190)
+                .glassEffect(opacity: 0.75, blurRadius: acrylicBlur, edgeBrightness: 1.0, noise: 0.02)
+
+                // Store App Directory
+                Box {
+                    VStack(alignment: .leading, spacing: 16) {
+                        // Spotlight Banner
+                        Box {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("FEATURED DAPPS")
+                                    .font(.system(size: 11, weight: .bold))
+                                    .foregroundColor("#00D2FF")
+                                Text("DCODX Studio Suite 2026")
+                                    .font(.system(size: 20, weight: .bold))
+                                    .foregroundColor("#FFFFFF")
+                                Text("Next-generation hardware accelerated IDE for Surflang and DreXUI on DAXOS.")
+                                    .font(.system(size: 12))
+                                    .foregroundColor("#CBD5E1")
+                            }
+                            .padding(16)
+                        }
+                        .cornerRadius(12)
+                        .backgroundColor("#202330")
+
+                        // Curated Apps Header
+                        Text("Certified Sandboxed Applications")
+                            .font(.system(size: 15, weight: .bold))
+                            .foregroundColor("#FFFFFF")
+
+                        // App Cards Grid (With explicit non-overlapping card pods)
+                        HStack(spacing: 14) {
+                            // DCODX IDE
+                            Box {
+                                VStack(spacing: 8) {
+                                    Box().frame(width: 48, height: 48).cornerRadius(10).backgroundColor("#00D2FF")
+                                    Text("DCODX IDE").font(.system(size: 12, weight: .bold)).foregroundColor("#FFFFFF")
+                                    Text("DAXOS Core [VERIFIED]").font(.system(size: 9, weight: .bold)).foregroundColor("#30D158")
+                                    Button(title: "LAUNCH", action: { }).buttonStyle(.accent)
+                                }
+                                .padding(12)
+                            }
+                            .frame(width: 130)
+                            .glassEffect(opacity: 0.65, blurRadius: 14.0, edgeBrightness: 1.0, noise: 0.01)
+                            .cornerRadius(12)
+
+                            // DaXBro Browser
+                            Box {
+                                VStack(spacing: 8) {
+                                    Box().frame(width: 48, height: 48).cornerRadius(10).backgroundColor("#FF6B00")
+                                    Text("DaXBro").font(.system(size: 12, weight: .bold)).foregroundColor("#FFFFFF")
+                                    Text("Hardened Blink [VERIFIED]").font(.system(size: 9, weight: .bold)).foregroundColor("#30D158")
+                                    Button(title: "LAUNCH", action: { }).buttonStyle(.accent)
+                                }
+                                .padding(12)
+                            }
+                            .frame(width: 130)
+                            .glassEffect(opacity: 0.65, blurRadius: 14.0, edgeBrightness: 1.0, noise: 0.01)
+                            .cornerRadius(12)
+
+                            // DXDEF Security
+                            Box {
+                                VStack(spacing: 8) {
+                                    Box().frame(width: 48, height: 48).cornerRadius(10).backgroundColor("#30D158")
+                                    Text("DXDEF").font(.system(size: 12, weight: .bold)).foregroundColor("#FFFFFF")
+                                    Text("TPM & Landlock [VERIFIED]").font(.system(size: 9, weight: .bold)).foregroundColor("#30D158")
+                                    Button(title: "OPEN", action: { }).buttonStyle(.secondary)
+                                }
+                                .padding(12)
+                            }
+                            .frame(width: 130)
+                            .glassEffect(opacity: 0.65, blurRadius: 14.0, edgeBrightness: 1.0, noise: 0.01)
+                            .cornerRadius(12)
+
+                            // Files / Finder
+                            Box {
+                                VStack(spacing: 8) {
+                                    Box().frame(width: 48, height: 48).cornerRadius(10).backgroundColor("#007AFF")
+                                    Text("Finder").font(.system(size: 12, weight: .bold)).foregroundColor("#FFFFFF")
+                                    Text("System Core [VERIFIED]").font(.system(size: 9, weight: .bold)).foregroundColor("#30D158")
+                                    Button(title: "OPEN", action: { }).buttonStyle(.secondary)
+                                }
+                                .padding(12)
+                            }
+                            .frame(width: 130)
+                            .glassEffect(opacity: 0.65, blurRadius: 14.0, edgeBrightness: 1.0, noise: 0.01)
+                            .cornerRadius(12)
+                        }
+
+                        Spacer()
+                    }
+                    .padding(20)
+                }
+                .glassEffect(opacity: 0.85, blurRadius: acrylicBlur, edgeBrightness: 1.1, noise: 0.02)
+            }
+        };
+    }
+}

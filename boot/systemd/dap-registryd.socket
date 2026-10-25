@@ -1,0 +1,21 @@
+# ==============================================================================
+# DAXOS SYSTEMD SOCKET ACTIVATION: CENTRAL REGISTRY DAEMON
+# File: boot/systemd/dap-registryd.socket
+# ==============================================================================
+[Unit]
+Description=DAXOS Central System Registry Socket
+Documentation=file:///home/kangpcode/wwwsite/daxos/docs/FASE_2_BAGIAN_1_ERD_SKEMA_REGISTRY_SQL.md
+DefaultDependencies=no
+Before=sockets.target
+
+[Socket]
+ListenStream=/run/daxos/registry.sock
+SocketUser=daxos-registry
+SocketGroup=daxos-registry
+SocketMode=0660
+DirectoryMode=0755
+Accept=no
+Backlog=128
+
+[Install]
+WantedBy=sockets.target

@@ -1,0 +1,149 @@
+// ============================================================================
+// DAXOS CAMERA APPLICATION
+// File: examples/camera/src/main.surf
+// Language: Surflang 1.0 (Declarative DreXUI Component)
+// ============================================================================
+
+module daxos.camera;
+
+component CameraApp: Component {
+    @State var captureMode: String = "photo"; // "photo" | "video"
+    @State var isRecording: Bool = false;
+    @State var activeFilter: String = "Normal";
+    @State var resolution: String = "1080p";
+    @State var exposureBias: Float = 0.0;
+    @State var photoCount: Int = 0;
+    @State var flashMode: String = "auto"; // "off" | "on" | "auto"
+    @State var isCameraReady: Bool = true;
+    @State var viewfinderOverlayBlur: Float = 24.0;
+
+    func onShutterClicked() {
+        if captureMode == "photo" {
+            photoCount = photoCount + 1;
+            // Shutter animation trigger & photo saved to ~/Pictures/Camera/
+        } else {
+            isRecording = !isRecording;
+        }
+    }
+
+    func setFilter(filterName: String) {
+        activeFilter = filterName;
+    }
+
+    func setResolution(res: String) {
+        resolution = res;
+    }
+
+    func toggleFlash() {
+        if flashMode == "auto" {
+            flashMode = "on";
+        } else if flashMode == "on" {
+            flashMode = "off";
+        } else {
+            flashMode = "auto";
+        }
+    }
+
+    func body() -> ViewNode {
+        return Card {
+            ZStack {
+                // Live Viewfinder Texture Feed (Hardware Accelerated via Vulkan/DMA-BUF)
+                Box {
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Text(isRecording ? "[REC 00:01:24]" : "")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor("#FF3B30")
+                            Spacer()
+                        }
+                    }
+                }
+                .backgroundColor("#0A0A0C")
+                .cornerRadius(16)
+
+                // Top Floating Control Bar (macOS Acrylic Glass HUD)
+                VStack {
+                    HStack(spacing: 12) {
+                        Button(title: flashMode == "auto" ? "FLASH: AUTO" : (flashMode == "on" ? "FLASH: ON" : "FLASH: OFF"), action: { toggleFlash() })
+                            .buttonStyle(.glass)
+                        
+                        Button(title: resolution, action: { 
+                            if resolution == "1080p" {
+                                setResolution(res: "4K");
+                            } else if resolution == "4K" {
+                                setResolution(res: "720p");
+                            } else {
+                                setResolution(res: "1080p");
+                            }
+                        })
+                        .buttonStyle(.glass)
+
+                        Spacer()
+
+                        Text("DAXOS Vision HDR")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor("#E0E0E0")
+
+                        Spacer()
+
+                        Button(title: "Filters", action: { })
+                            .buttonStyle(.glass)
+                    }
+                    .padding(14)
+                    .glassEffect(opacity: 0.70, blurRadius: viewfinderOverlayBlur, edgeBrightness: 1.1, noise: 0.02)
+                    .cornerRadius(12)
+
+                    Spacer()
+
+                    // Bottom Floating Control Deck
+                    VStack(spacing: 12) {
+                        // Filter Pills Carousel
+                        HStack(spacing: 8) {
+                            Button(title: "Normal", action: { setFilter(filterName: "Normal") })
+                                .buttonStyle(activeFilter == "Normal" ? .accent : .secondary)
+                            Button(title: "Vivid", action: { setFilter(filterName: "Vivid") })
+                                .buttonStyle(activeFilter == "Vivid" ? .accent : .secondary)
+                            Button(title: "Noir", action: { setFilter(filterName: "Noir") })
+                                .buttonStyle(activeFilter == "Noir" ? .accent : .secondary)
+                            Button(title: "Acrylic", action: { setFilter(filterName: "Acrylic") })
+                                .buttonStyle(activeFilter == "Acrylic" ? .accent : .secondary)
+                        }
+
+                        // Shutter & Mode Bar
+                        HStack(spacing: 28) {
+                            // Gallery Thumbnail Preview
+                            Box {
+                                Text(photoCount > 0 ? "RAW " + String(photoCount) : "RAW")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor("#FFFFFF")
+                            }
+                            .frame(width: 48, height: 48)
+                            .glassEffect(opacity: 0.8, blurRadius: 16.0, edgeBrightness: 1.0, noise: 0.0)
+                            .cornerRadius(10)
+
+                            // Mode Selector: Photo / Video
+                            HStack(spacing: 16) {
+                                Button(title: "PHOTO", action: { captureMode = "photo"; isRecording = false; })
+                                    .buttonStyle(captureMode == "photo" ? .accent : .glass)
+                                Button(title: "VIDEO", action: { captureMode = "video"; })
+                                    .buttonStyle(captureMode == "video" ? .danger : .glass)
+                            }
+
+                            // Circular Shutter Trigger
+                            Button(title: captureMode == "photo" ? "CAPTURE" : (isRecording ? "STOP" : "RECORD"), action: { onShutterClicked() })
+                                .buttonStyle(.primary)
+                                .frame(width: 64, height: 64)
+                                .cornerRadius(32)
+                        }
+                    }
+                    .padding(16)
+                    .glassEffect(opacity: 0.80, blurRadius: viewfinderOverlayBlur, edgeBrightness: 1.2, noise: 0.02)
+                    .cornerRadius(20)
+                }
+                .padding(16)
+            }
+        };
+    }
+}

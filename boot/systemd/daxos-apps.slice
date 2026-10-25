@@ -1,0 +1,20 @@
+# ==============================================================================
+# DAXOS SYSTEMD CGROUP V2 SANDBOXED APPLICATIONS SLICE
+# File: boot/systemd/daxos-apps.slice
+# ==============================================================================
+[Unit]
+Description=DAXOS Sandboxed User Applications Slice (.dapp containers)
+Documentation=file:///home/kangpcode/wwwsite/daxos/docs/FASE_5_BAGIAN_4_COMPILER_DCODX_FORMAT_BUNDLE.md
+PartOf=daxos.slice
+Before=slices.target
+
+[Slice]
+CPUAccounting=yes
+MemoryAccounting=yes
+IOAccounting=yes
+TasksAccounting=yes
+CPUWeight=200
+IOWeight=200
+MemoryHigh=12G
+MemoryMax=14G
+TasksMax=16384

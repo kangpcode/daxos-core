@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=DAXOS Studio Camera
+Comment=Aplikasi Kamera HDR 4K 60fps & Vision Engine
+Exec=daxdrop --camera
+Icon=org.daxos.camera
+Terminal=false
+Categories=AudioVideo;Video;Recorder;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.camera
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

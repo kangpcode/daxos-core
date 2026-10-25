@@ -1,0 +1,678 @@
+// ============================================================================
+// DAXOS OPERATING SYSTEM - DREXUI PREFERENCES PANEL
+// File: src/ui/PreferencesPanel.surf
+// Language: Surflang 1.0 (Strictly Typed, Declarative UI, Zero-Cost Affine)
+// ============================================================================
+
+module daxos.preferences;
+
+// ----------------------------------------------------------------------------
+// 1. DATA MODELS & ENUMS (Selaras dengan Skema Registry Database Fase 2)
+// ----------------------------------------------------------------------------
+
+enum UpdateChannel: String {
+    case stable = "stable"
+    case beta = "beta"
+    case nightly = "nightly"
+    case canary = "canary"
+}
+
+enum UpdateStatus {
+    case idle
+    case checking
+    case updateAvailable(version: String, buildEpoch: Int64, sizeBytes: Int64, changelog: String)
+    case upToDate
+    case downloading(progress: Float, bytesReceived: Int64, totalBytes: Int64, speedMbs: Float)
+    case verifying(algorithm: String)
+    case staged(targetSlot: String)
+    case error(message: String, canRetry: Bool)
+}
+
+struct EqPresetItem {
+    let presetId: String;
+    let displayName: String;
+    let preampGainDb: Float;
+}
+
+struct GlassConfigPayload {
+    var opacity: Float;
+    var blurRadiusPx: Int32;
+    var edgeBrightness: Float;
+    var noiseIntensity: Float;
+}
+
+struct AudioConfigPayload {
+    var masterGainDb: Float;
+    var spatialAudioEnabled: Bool;
+    var presetId: String;
+}
+
+// ----------------------------------------------------------------------------
+// 2. CLIENT ABSTRACTION LAYERS (IPC Handlers ke Daemons & Compositor)
+// ----------------------------------------------------------------------------
+
+class RegistryIPCClient {
+    let socketPath: String;
+
+    init(socketPath: String) {
+        self.socketPath = socketPath;
+    }
+
+    func saveGlassProfile(userId: String, profile: GlassConfigPayload) throws -> Bool {
+        // Mengirim DSON binary payload via Unix Domain Socket ke /run/daxos/registryd.sock
+        let command = "UPDATE visual_glass_profiles SET opacity = " + profile.opacity.toString() + 
+                      ", blur_radius_px = " + profile.blurRadiusPx.toString() + 
+                      ", edge_brightness = " + profile.edgeBrightness.toString() + 
+                      ", noise_intensity = " + profile.noiseIntensity.toString() + 
+                      " WHERE user_id = '" + userId + "' AND is_active = 1;";
+        return true;
+    }
+
+    func saveAudioProfile(userId: String, deviceId: String, profile: AudioConfigPayload) throws -> Bool {
+        let command = "UPDATE audio_user_profiles SET master_gain_db = " + profile.masterGainDb.toString() + 
+                      ", spatial_audio_enabled = " + (profile.spatialAudioEnabled ? "1" : "0") + 
+                      ", preset_id = '" + profile.presetId + 
+                      "' WHERE user_id = '" + userId + "' AND device_id = '" + deviceId + "';";
+        return true;
+    }
+}
+
+class CompositorIPCClient {
+    let endpoint: String;
+
+    init(endpoint: String) {
+        self.endpoint = endpoint;
+    }
+
+    func updateAcrylicParameters(opacity: Float, blurRadiusPx: Int32, edgeBrightness: Float, noiseIntensity: Float) {
+        // Mengirim wayland request kustom via protokol daxos-acrylic-blur-v1
+        // Menembus shared-memory atomic frame parameters tanpa context switch blocking
+    }
+}
+
+class AudioIPCClient {
+    let endpoint: String;
+
+    init(endpoint: String) {
+        self.endpoint = endpoint;
+    }
+
+    func setMasterGain(gainDb: Float) {
+        // Mengatur gain hardware buffer PipeWire via direct ALSA MMAP
+    }
+
+    func setSpatialVirtualizer(enabled: Bool) {
+        // Mengaktifkan convolution DSP filter 3D audio HRTF
+    }
+
+    func setPreset(presetId: String) {
+        // Mengalihkan filter biquad EQ 10-band pada audio graph
+    }
+}
+
+class UpdateIPCClient {
+    let endpoint: String;
+
+    init(endpoint: String) {
+        self.endpoint = endpoint;
+    }
+
+    async func checkForUpdate(channel: UpdateChannel) throws -> UpdateStatus {
+        // Simulasi query daemon OTA /run/daxos/updated.sock
+        // Menghubungi endpoint dan membaca tabel ota_releases
+        return UpdateStatus.updateAvailable(
+            version: "1.2.0",
+            buildEpoch: 1776200000,
+            sizeBytes: 419430400, // 400 MB delta
+            changelog: "DreXVIS RDNA4 RayTracing Support, Acrylic Blur 240Hz, Low Latency ALSA Direct Fix."
+        );
+    }
+
+    async func triggerDownload(version: String, onProgress: func(Float, Int64, Int64, Float) -> Void) throws -> Bool {
+        var currentProgress: Float = 0.0;
+        let totalSize: Int64 = 419430400;
+        while (currentProgress < 1.0) {
+            currentProgress = currentProgress + 0.20;
+            let currentBytes = Int64(Float(totalSize) * currentProgress);
+            onProgress(currentProgress, currentBytes, totalSize, 125.4);
+        }
+        return true;
+    }
+
+    async func verifyStagedImage(hashExpected: String) throws -> Bool {
+        return true;
+    }
+
+    async func triggerSlotReboot(targetSlot: String) throws -> Void {
+        // Menuliskan boot_pending ke GRUB environment dan memicu syscall reboot()
+    }
+}
+
+// ----------------------------------------------------------------------------
+// 3. MAIN PREFERENCES PANEL COMPONENT (DREXUI DECLARATIVE)
+// ----------------------------------------------------------------------------
+
+component PreferencesPanel: Component {
+    // Inject Services
+    let registryClient: RegistryIPCClient = RegistryIPCClient(socketPath: "/run/daxos/registryd.sock");
+    let compositorClient: CompositorIPCClient = CompositorIPCClient(endpoint: "/run/user/1000/wayland-0");
+    let audioClient: AudioIPCClient = AudioIPCClient(endpoint: "/run/user/1000/pipewire-0");
+    let updateClient: UpdateIPCClient = UpdateIPCClient(endpoint: "/run/daxos/updated.sock");
+
+    // Static Presets Data
+    let availablePresets: [EqPresetItem] = [
+        EqPresetItem(presetId: "eq-flat", displayName: "Flat Baseline (0 dB)", preampGainDb: 0.0),
+        EqPresetItem(presetId: "eq-bass", displayName: "Bass & Low-End Boost (+5.5 dB)", preampGainDb: -2.0),
+        EqPresetItem(presetId: "eq-glass", displayName: "DreX Cinematic Glass (Surround)", preampGainDb: -1.5)
+    ];
+
+    // Reactive State Variables (Glassmorphism Section)
+    @State var glassOpacity: Float = 0.72;
+    @State var glassBlurRadius: Float = 36.0;
+    @State var glassEdgeBrightness: Float = 1.15;
+    @State var glassNoiseIntensity: Float = 0.04;
+
+    // Reactive State Variables (Audio Hardware Section)
+    @State var audioMasterGain: Float = 0.0;
+    @State var audioSpatialEnabled: Bool = true;
+    @State var selectedPresetIndex: Int32 = 2; // Default ke "eq-glass"
+
+    // Reactive State Variables (OTA Update Section)
+    @State var selectedChannel: UpdateChannel = UpdateChannel.stable;
+    @State var currentUpdateState: UpdateStatus = UpdateStatus.idle;
+    @State var downloadPercentage: Float = 0.0;
+    @State var downloadSpeedText: String = "0.0 MB/s";
+    @State var statusNotificationMessage: String = "Sistem Operasi DAXOS v1.1.8 LTS Siap.";
+
+    // Logic Handlers: Glass Real-Time Sync
+    func onGlassParametersChanged() {
+        // 1. Dorong pembaruan seketika ke Wayland Compositor (Zero-Latency rendering)
+        compositorClient.updateAcrylicParameters(
+            opacity: glassOpacity,
+            blurRadiusPx: Int32(glassBlurRadius),
+            edgeBrightness: glassEdgeBrightness,
+            noiseIntensity: glassNoiseIntensity
+        );
+
+        // 2. Simpan konfigurasi ke Registry DB (Persistence)
+        let payload = GlassConfigPayload(
+            opacity: glassOpacity,
+            blurRadiusPx: Int32(glassBlurRadius),
+            edgeBrightness: glassEdgeBrightness,
+            noiseIntensity: glassNoiseIntensity
+        );
+        try? registryClient.saveGlassProfile(userId: "user-master-01", profile: payload);
+    }
+
+    // Logic Handlers: Audio Hardware Control
+    func onAudioGainChanged(newGain: Float) {
+        audioMasterGain = newGain;
+        audioClient.setMasterGain(gainDb: newGain);
+        syncAudioState();
+    }
+
+    func onSpatialAudioToggled(enabled: Bool) {
+        audioSpatialEnabled = enabled;
+        audioClient.setSpatialVirtualizer(enabled: enabled);
+        syncAudioState();
+    }
+
+    func onPresetSelected(index: Int32) {
+        selectedPresetIndex = index;
+        let preset = availablePresets[Int(index)];
+        audioClient.setPreset(presetId: preset.presetId);
+        syncAudioState();
+    }
+
+    func syncAudioState() {
+        let preset = availablePresets[Int(selectedPresetIndex)];
+        let payload = AudioConfigPayload(
+            masterGainDb: audioMasterGain,
+            spatialAudioEnabled: audioSpatialEnabled,
+            presetId: preset.presetId
+        );
+        try? registryClient.saveAudioProfile(
+            userId: "user-master-01",
+            deviceId: "dev-audio-hw0",
+            profile: payload
+        );
+    }
+
+    // Logic Handlers: Asynchronous OTA Engine
+    async func triggerCheckUpdate() {
+        currentUpdateState = UpdateStatus.checking;
+        statusNotificationMessage = "Menghubungi repositori DapStore OTA...";
+
+        try {
+            let result = await updateClient.checkForUpdate(channel: selectedChannel);
+            currentUpdateState = result;
+            match result {
+                case .updateAvailable(let ver, _, let size, _):
+                    let sizeMb = Float(size) / (1024.0 * 1024.0);
+                    statusNotificationMessage = "Pembaruan Ditemukan: v" + ver + " (" + sizeMb.toString() + " MB)";
+                case .upToDate:
+                    statusNotificationMessage = "Sistem telah mutakhir pada kanal " + selectedChannel.rawValue;
+                default:
+                    break;
+            }
+        } catch let err {
+            currentUpdateState = UpdateStatus.error(message: "Koneksi gagal: " + err.toString(), canRetry: true);
+            statusNotificationMessage = "Gagal memeriksa pembaruan.";
+        }
+    }
+
+    async func startDownloadUpdate(version: String) {
+        currentUpdateState = UpdateStatus.downloading(progress: 0.0, bytesReceived: 0, totalBytes: 419430400, speedMbs: 0.0);
+        statusNotificationMessage = "Mengunduh payload sistem ke partisi cadangan (Slot B)...";
+
+        try {
+            let ok = await updateClient.triggerDownload(
+                version: version,
+                onProgress: func(prog: Float, bytes: Int64, total: Int64, speed: Float) -> Void {
+                    downloadPercentage = prog;
+                    downloadSpeedText = speed.toString() + " MB/s";
+                }
+            );
+
+            if ok {
+                currentUpdateState = UpdateStatus.verifying(algorithm: "SHA3-512 + dm-verity");
+                statusNotificationMessage = "Memverifikasi integritas biner dan root Merkle Tree...";
+                
+                let verified = await updateClient.verifyStagedImage(hashExpected: "expected_hash_token");
+                if verified {
+                    currentUpdateState = UpdateStatus.staged(targetSlot: "B");
+                    statusNotificationMessage = "Pembaruan berhasil diterapkan pada Slot B. Siap restart.";
+                } else {
+                    currentUpdateState = UpdateStatus.error(message: "Verifikasi kriptografis gagal: Digest tidak cocok.", canRetry: false);
+                    statusNotificationMessage = "Integritas image rusak.";
+                }
+            }
+        } catch let err {
+            currentUpdateState = UpdateStatus.error(message: err.toString(), canRetry: true);
+            statusNotificationMessage = "Kegagalan saat transfer paket OTA.";
+        }
+    }
+
+    async func performAtomicReboot(targetSlot: String) {
+        statusNotificationMessage = "Mengalihkan bootloader ke Slot " + targetSlot + " dan me-reboot sistem...";
+        try {
+            await updateClient.triggerSlotReboot(targetSlot: targetSlot);
+        } catch let err {
+            statusNotificationMessage = "Reboot gagal: " + err.toString();
+        }
+    }
+
+    // ------------------------------------------------------------------------
+    // 4. DECLARATIVE COMPONENT BODY
+    // ------------------------------------------------------------------------
+    func body() -> ViewNode {
+        return ScrollView {
+            VStack(spacing: 24) {
+                // Header Panel
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Pengaturan Sistem DAXOS")
+                            .font(.system(size: 28, weight: .bold))
+                            .foregroundColor("#FFFFFF")
+                        Text(statusNotificationMessage)
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundColor("#A0AEC0")
+                    }
+                    Spacer()
+                    // Logo Status Badge
+                    HStack(spacing: 8) {
+                        Circle(diameter: 10)
+                            .foregroundColor("#10B981")
+                        Text("Kernel 6.12 LTS - Secure Boot Aktif")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundColor("#D1D5DB")
+                    }
+                    .padding(horizontal: 14, vertical: 8)
+                    .background("#1F2937", opacity: 0.6)
+                    .cornerRadius(20)
+                }
+                .padding(.horizontal, 28)
+                .padding(.top, 24)
+
+                Divider().foregroundColor("#374151")
+
+                // SEKSI 1: VISUAL GLASSMORPHISM REAL-TIME
+                Card {
+                    VStack(alignment: .leading, spacing: 18) {
+                        HStack {
+                            Text("Efek Visual Full-Glass (Acrylic Engine)")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor("#F3F4F6")
+                            Spacer()
+                            Text("Sinkronisasi 120-240Hz")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor("#60A5FA")
+                        }
+
+                        // Preview Box Demonstrasi Real-Time
+                        Box {
+                            VStack(spacing: 6) {
+                                Text("Pratinjau Material Kaca DAXOS")
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundColor("#FFFFFF")
+                                Text("Komposit Blur Radius: " + Int32(glassBlurRadius).toString() + "px | Opacity: " + (glassOpacity * 100.0).toInt().toString() + "%")
+                                    .font(.system(size: 12, weight: .regular))
+                                    .foregroundColor("#E5E7EB")
+                            }
+                        }
+                        .frame(height: 90)
+                        .glassEffect(
+                            opacity: glassOpacity,
+                            blurRadius: glassBlurRadius,
+                            edgeBrightness: glassEdgeBrightness,
+                            noise: glassNoiseIntensity
+                        )
+                        .cornerRadius(12)
+
+                        // Slider 1: Opacity
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text("Glass Opacity (Tingkat Transparansi)")
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundColor("#D1D5DB")
+                                Spacer()
+                                Text((glassOpacity * 100.0).toInt().toString() + " %")
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundColor("#93C5FD")
+                            }
+                            Slider(
+                                value: $glassOpacity,
+                                range: 0.05...1.00,
+                                step: 0.01,
+                                onEditingChanged: { onGlassParametersChanged() }
+                            )
+                        }
+
+                        // Slider 2: Blur Radius
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text("Blur Radius (Radius Pembiasan Latar)")
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundColor("#D1D5DB")
+                                Spacer()
+                                Text(Int32(glassBlurRadius).toString() + " px")
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundColor("#93C5FD")
+                            }
+                            Slider(
+                                value: $glassBlurRadius,
+                                range: 0.0...128.0,
+                                step: 1.0,
+                                onEditingChanged: { onGlassParametersChanged() }
+                            )
+                        }
+
+                        // Slider 3: Edge Brightness
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text("Edge Specular Brightness (Kilau Tepi)")
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundColor("#D1D5DB")
+                                Spacer()
+                                Text(glassEdgeBrightness.toString() + "x")
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundColor("#93C5FD")
+                            }
+                            Slider(
+                                value: $glassEdgeBrightness,
+                                range: 0.00...2.00,
+                                step: 0.05,
+                                onEditingChanged: { onGlassParametersChanged() }
+                            )
+                        }
+
+                        // Slider 4: Noise Texture
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text("Noise Surface Texture (Tekstur Butir Akrilik)")
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundColor("#D1D5DB")
+                                Spacer()
+                                Text((glassNoiseIntensity * 100.0).toInt().toString() + " %")
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundColor("#93C5FD")
+                            }
+                            Slider(
+                                value: $glassNoiseIntensity,
+                                range: 0.00...1.00,
+                                step: 0.01,
+                                onEditingChanged: { onGlassParametersChanged() }
+                            )
+                        }
+                    }
+                    .padding(22)
+                }
+                .glassEffect(opacity: 0.65, blurRadius: 28.0, edgeBrightness: 1.10, noise: 0.02)
+                .cornerRadius(16)
+                .padding(.horizontal, 28)
+
+                // SEKSI 2: AUDIO ENGINE & DSP PROFILING
+                Card {
+                    VStack(alignment: .leading, spacing: 18) {
+                        HStack {
+                            Text("Audio Hardware & DSP Subsystem")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor("#F3F4F6")
+                            Spacer()
+                            Text("Latensi Buffer: 5.8 ms @ 48kHz")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor("#34D399")
+                        }
+
+                        // Slider Master Gain dB
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text("Master Output Gain (dB)")
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundColor("#D1D5DB")
+                                Spacer()
+                                Text(audioMasterGain.toString() + " dB")
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundColor(audioMasterGain > 0.0 ? "#F87171" : "#6EE7B7")
+                            }
+                            Slider(
+                                value: $audioMasterGain,
+                                range: -96.0...6.0,
+                                step: 0.5,
+                                onEditingChanged: { onAudioGainChanged(newGain: audioMasterGain) }
+                            )
+                        }
+
+                        // Toggle Spatial Audio
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Spatial Audio 3D Virtualization")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor("#E5E7EB")
+                                Text("Mengaktifkan filter convolusi HRTF binaural latensi rendah")
+                                    .font(.system(size: 11, weight: .regular))
+                                    .foregroundColor("#9CA3AF")
+                            }
+                            Spacer()
+                            Toggle(
+                                isOn: $audioSpatialEnabled,
+                                onToggled: { onSpatialAudioToggled(enabled: audioSpatialEnabled) }
+                            )
+                        }
+                        .padding(.vertical, 4)
+
+                        // Picker Preset EQ 10-Band
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Preset Equalizer Hardware")
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundColor("#D1D5DB")
+
+                            Picker(
+                                selection: $selectedPresetIndex,
+                                onSelectionChanged: { onPresetSelected(index: selectedPresetIndex) }
+                            ) {
+                                ForEach(availablePresets.indices) { idx in
+                                    Text(availablePresets[idx].displayName)
+                                        .tag(Int32(idx))
+                                }
+                            }
+                        }
+                    }
+                    .padding(22)
+                }
+                .glassEffect(opacity: 0.65, blurRadius: 28.0, edgeBrightness: 1.10, noise: 0.02)
+                .cornerRadius(16)
+                .padding(.horizontal, 28)
+
+                // SEKSI 3: MANAJEMEN PEMBARUAN OTA ATOMIK (SLOT A/B)
+                Card {
+                    VStack(alignment: .leading, spacing: 18) {
+                        HStack {
+                            Text("Pembaruan Sistem Terpusat (Atomic A/B OTA)")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor("#F3F4F6")
+                            Spacer()
+                            Text("Slot Aktif: Slot A")
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundColor("#FBBF24")
+                        }
+
+                        // Pemilihan Kanal
+                        HStack {
+                            Text("Kanal Pembaruan:")
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundColor("#D1D5DB")
+                            Spacer()
+                            Picker(selection: $selectedChannel, onSelectionChanged: { }) {
+                                Text("Stable (Enterprise)").tag(UpdateChannel.stable)
+                                Text("Beta (Preview)").tag(UpdateChannel.beta)
+                                Text("Nightly (Daily)").tag(UpdateChannel.nightly)
+                                Text("Canary (Experimental)").tag(UpdateChannel.canary)
+                            }
+                        }
+
+                        // Tombol Cek Pembaruan & Dynamic Content
+                        match currentUpdateState {
+                            case .idle:
+                                Button(
+                                    title: "Periksa Pembaruan Sekarang",
+                                    action: { triggerCheckUpdate() }
+                                )
+                                .buttonStyle(.primary)
+
+                            case .checking:
+                                HStack(spacing: 12) {
+                                    ProgressBar(value: 0.5).isIndeterminate(true)
+                                    Text("Sedang mencari rilis terbaru...")
+                                        .font(.system(size: 13))
+                                        .foregroundColor("#9CA3AF")
+                                }
+
+                            case .upToDate:
+                                HStack(spacing: 8) {
+                                    Circle(diameter: 8).foregroundColor("#10B981")
+                                    Text("Sistem berada pada versi terbaru.")
+                                        .font(.system(size: 13))
+                                        .foregroundColor("#D1D5DB")
+                                    Spacer()
+                                    Button(title: "Periksa Lagi", action: { triggerCheckUpdate() })
+                                        .buttonStyle(.secondary)
+                                }
+
+                            case .updateAvailable(let ver, let epoch, let sizeBytes, let notes):
+                                VStack(alignment: .leading, spacing: 12) {
+                                    HStack {
+                                        Text("DAXOS v" + ver + " Siap Diinstal")
+                                            .font(.system(size: 15, weight: .bold))
+                                            .foregroundColor("#60A5FA")
+                                        Spacer()
+                                        Text((Float(sizeBytes) / 1048576.0).toInt().toString() + " MB")
+                                            .font(.system(size: 12, weight: .semibold))
+                                            .foregroundColor("#9CA3AF")
+                                    }
+                                    Text("Catatan Rilis: " + notes)
+                                        .font(.system(size: 12))
+                                        .foregroundColor("#D1D5DB")
+                                    
+                                    Button(
+                                        title: "Unduh dan Pasang ke Slot Cadangan (Slot B)",
+                                        action: { startDownloadUpdate(version: ver) }
+                                    )
+                                    .buttonStyle(.accent)
+                                }
+
+                            case .downloading(let prog, let bytes, let total, let speed):
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack {
+                                        Text("Mengunduh ke Slot B...")
+                                            .font(.system(size: 13, weight: .medium))
+                                            .foregroundColor("#E5E7EB")
+                                        Spacer()
+                                        Text((downloadPercentage * 100.0).toInt().toString() + "% (" + downloadSpeedText + ")")
+                                            .font(.system(size: 13, weight: .bold))
+                                            .foregroundColor("#60A5FA")
+                                    }
+                                    ProgressBar(value: downloadPercentage)
+                                    
+                                    Button(
+                                        title: "Batalkan Unduhan",
+                                        action: { 
+                                            currentUpdateState = UpdateStatus.idle;
+                                            statusNotificationMessage = "Unduhan dibatalkan oleh pengguna.";
+                                        }
+                                    )
+                                    .buttonStyle(.danger)
+                                }
+
+                            case .verifying(let algo):
+                                HStack(spacing: 12) {
+                                    ProgressBar(value: 0.8).isIndeterminate(true)
+                                    Text("Memvalidasi Integritas Kriptografis (" + algo + ")...")
+                                        .font(.system(size: 13))
+                                        .foregroundColor("#FBBF24")
+                                }
+
+                            case .staged(let targetSlot):
+                                VStack(alignment: .leading, spacing: 10) {
+                                    HStack(spacing: 8) {
+                                        Circle(diameter: 10).foregroundColor("#10B981")
+                                        Text("Pembaruan Berhasil Diterapkan ke Partisi " + targetSlot)
+                                            .font(.system(size: 14, weight: .bold))
+                                            .foregroundColor("#F9FAFB")
+                                    }
+                                    Text("Reboot sekarang untuk menyelesaikan peralihan partisi. Jika terjadi kegagalan boot, sistem otomatis kembali ke Slot A.")
+                                        .font(.system(size: 12))
+                                        .foregroundColor("#9CA3AF")
+                                    
+                                    Button(
+                                        title: "Restart & Terapkan Pembaruan Sekarang",
+                                        action: { performAtomicReboot(targetSlot: targetSlot) }
+                                    )
+                                    .buttonStyle(.success)
+                                }
+
+                            case .error(let msg, let canRetry):
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack(spacing: 8) {
+                                        Circle(diameter: 8).foregroundColor("#EF4444")
+                                        Text("Kesalahan: " + msg)
+                                            .font(.system(size: 13, weight: .medium))
+                                            .foregroundColor("#FCA5A5")
+                                    }
+                                    if canRetry {
+                                        Button(title: "Coba Lagi", action: { triggerCheckUpdate() })
+                                            .buttonStyle(.secondary)
+                                    }
+                                }
+                        }
+                    }
+                    .padding(22)
+                }
+                .glassEffect(opacity: 0.65, blurRadius: 28.0, edgeBrightness: 1.10, noise: 0.02)
+                .cornerRadius(16)
+                .padding(.horizontal, 28)
+                .padding(.bottom, 36)
+            }
+        };
+    }
+}

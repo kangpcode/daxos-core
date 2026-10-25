@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=DaxWord Document Pro
+Comment=Pengolah Kata & Dokumen Formal DAXOS
+Exec=doffice word
+Icon=org.daxos.word
+Terminal=false
+Categories=Office;WordProcessor;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.word
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

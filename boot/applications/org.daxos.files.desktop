@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=Finder File Manager
+Comment=Manajer Berkas Respon Cepat dengan Integrasi Btrfs
+Exec=dfm
+Icon=org.daxos.files
+Terminal=false
+Categories=System;FileManager;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.files
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

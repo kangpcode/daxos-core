@@ -1,0 +1,23 @@
+[Unit]
+Description=DAXOS Low-Latency Audio Subsystem and PipeWire ALSA Mixer Daemon
+Documentation=man:daudio(1)
+After=sound.target dap-registryd.service
+PartOf=daxos.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Slice=daxos-system.slice
+ExecStart=/usr/bin/daudio status
+StandardOutput=journal
+StandardError=journal
+CapabilityBoundingSet=CAP_SYS_NICE CAP_SYS_RESOURCE
+AmbientCapabilities=CAP_SYS_NICE
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/lib/daxos /tmp /run
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=daxos.target

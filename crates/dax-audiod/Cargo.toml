@@ -1,0 +1,14 @@
+[package]
+name = "dax-audiod"
+version = "1.10.2026"
+edition = "2021"
+authors = ["Dhafa Nazula Permadi <kangpcode>"]
+description = "DAXOS Production Audio Subsystem & Volume Controller (daudio)"
+
+[[bin]]
+name = "daudio"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"

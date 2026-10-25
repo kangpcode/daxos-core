@@ -1,0 +1,89 @@
+# DAXOS Boot Autostart Configuration File
+# Location: /etc/daxos/autostart.toml & boot/autostart.toml
+# Managed by: Settings > Aplikasi Mulai Otomatis & scripts/daxos-autostart-manager.sh
+
+[autostart]
+master_enabled = true
+clean_boot = false
+stagger_delay_ms = 280
+preset = "recommended"
+
+[applications.finder]
+name = "Finder (File Manager)"
+exec = "dfm"
+desktop_file = "org.daxos.files.desktop"
+enabled = true
+impact = "low"
+impact_ms = 15
+
+[applications.duraserv]
+name = "DuraServ Controller & IPC Registry"
+exec = "duraserv-ctl"
+desktop_file = "org.daxos.duraserv.desktop"
+enabled = true
+impact = "low"
+impact_ms = 10
+
+[applications.terminal]
+name = "DaX-Term (Terminal Console)"
+exec = "dax-term"
+desktop_file = "org.daxos.terminal.desktop"
+enabled = false
+impact = "medium"
+impact_ms = 35
+
+[applications.sysmon]
+name = "DXMonitor (Activity Monitor)"
+exec = "dtop --chart"
+desktop_file = "org.daxos.sysmon.desktop"
+enabled = false
+impact = "medium"
+impact_ms = 40
+
+[applications.dxdef]
+name = "DXDEF Antivirus & Landlock Guard"
+exec = "dxdef-guard"
+desktop_file = "org.daxos.dxdef.desktop"
+enabled = false
+impact = "low"
+impact_ms = 20
+
+[applications.daxbro]
+name = "DaXBro Web Browser"
+exec = "daxbro"
+desktop_file = "org.daxos.daxbro.desktop"
+enabled = false
+impact = "high"
+impact_ms = 85
+
+[applications.dcodx_ide]
+name = "DCODX Studio IDE"
+exec = "dcodx-ide"
+desktop_file = "org.daxos.dcodx-ide.desktop"
+enabled = false
+impact = "high"
+impact_ms = 90
+
+[applications.daxword]
+name = "DaXWord Document Processor"
+exec = "daxword"
+desktop_file = "org.daxos.word.desktop"
+enabled = false
+impact = "medium"
+impact_ms = 30
+
+[applications.daxsheet]
+name = "DaXSheet Spreadsheet"
+exec = "daxsheet"
+desktop_file = "org.daxos.sheet.desktop"
+enabled = false
+impact = "medium"
+impact_ms = 30
+
+[applications.camera]
+name = "Camera (DaX-Cam)"
+exec = "dax-cam"
+desktop_file = "org.daxos.camera.desktop"
+enabled = false
+impact = "medium"
+impact_ms = 45

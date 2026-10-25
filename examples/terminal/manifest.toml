@@ -1,0 +1,40 @@
+[application]
+icon = "icon.svg"
+bundle_identifier = "org.daxos.terminal"
+display_name = "DAXOS Terminal"
+version = "1.0.0"
+build_number = 1
+minimum_os_version = "1.0.0"
+
+[developer]
+id = "dev-daxos-core"
+legal_name = "DAXOS Core Engineering Group"
+
+[sandbox]
+enforce = false
+network_isolation = "standard"
+
+[permissions]
+required = [
+    "daxos.permission.SYSTEM_TERMINAL",
+    "daxos.permission.PROCESS_MANAGEMENT"
+]
+optional = [
+    "daxos.permission.NETWORK_SOCKET"
+]
+
+[resources]
+max_memory_mb = 1024
+max_cpu_percent = 100
+max_file_descriptors = 4096
+
+[landlock_paths]
+read_write = [
+    "~",
+    "/tmp"
+]
+read_only = [
+    "/",
+    "/usr",
+    "/etc"
+]

@@ -1,0 +1,161 @@
+// ============================================================================
+// DAXOS CALCULATOR APPLICATION (dcalc GUI)
+// File: examples/calculator/src/main.surf
+// Language: Surflang 1.0 (Declarative DreXUI Component)
+// Lead Architect: Dhafa Nazula Permadi (@kangpcode)
+// Strictly ZERO EMOJIS - Production Grade
+// ============================================================================
+
+module daxos.calculator;
+
+component CalculatorApp: Component {
+    @State var displayValue: String = "0";
+    @State var currentOperation: String = "";
+    @State var storedOperand: Float = 0.0;
+    @State var isEnteringSecondOperand: Bool = false;
+    @State var acrylicBlurRadius: Float = 28.0;
+
+    func onDigitPressed(digit: String) {
+        if displayValue == "0" || isEnteringSecondOperand {
+            displayValue = digit;
+            isEnteringSecondOperand = false;
+        } else {
+            displayValue = displayValue + digit;
+        }
+    }
+
+    func onDecimalPressed() {
+        if !displayValue.contains(".") {
+            displayValue = displayValue + ".";
+        }
+    }
+
+    func onOperationPressed(op: String) {
+        currentOperation = op;
+        storedOperand = displayValue.toFloat();
+        isEnteringSecondOperand = true;
+    }
+
+    func onEqualsPressed() {
+        let secondOperand = displayValue.toFloat();
+        if currentOperation == "+" {
+            displayValue = String(storedOperand + secondOperand);
+        } else if currentOperation == "-" {
+            displayValue = String(storedOperand - secondOperand);
+        } else if currentOperation == "×" {
+            displayValue = String(storedOperand * secondOperand);
+        } else if currentOperation == "÷" {
+            if secondOperand != 0.0 {
+                displayValue = String(storedOperand / secondOperand);
+            } else {
+                displayValue = "Error";
+            }
+        }
+        currentOperation = "";
+        isEnteringSecondOperand = false;
+    }
+
+    func onClearPressed() {
+        displayValue = "0";
+        currentOperation = "";
+        storedOperand = 0.0;
+        isEnteringSecondOperand = false;
+    }
+
+    func onToggleSign() {
+        if displayValue != "0" && displayValue != "Error" {
+            if displayValue.startsWith("-") {
+                displayValue = displayValue.substring(1);
+            } else {
+                displayValue = "-" + displayValue;
+            }
+        }
+    }
+
+    func onPercentage() {
+        let val = displayValue.toFloat() / 100.0;
+        displayValue = String(val);
+    }
+
+    func body() -> ViewNode {
+        return Card {
+            VStack(spacing: 16) {
+                // Header & Mode Indicator
+                HStack(spacing: 8) {
+                    Text("DAXOS Calculator")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundColor("#E2E8F0")
+                    Spacer()
+                    Text(currentOperation.isEmpty ? "Ready" : "OP: " + currentOperation)
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundColor("#00D2FF")
+                }
+                .padding(4)
+
+                // Calculator Primary Display
+                Box {
+                    VStack(alignment: .trailing, spacing: 4) {
+                        if !currentOperation.isEmpty {
+                            Text(String(storedOperand) + " " + currentOperation)
+                                .font(.system(size: 12))
+                                .foregroundColor("#94A3B8")
+                        }
+                        HStack {
+                            Spacer()
+                            Text(displayValue)
+                                .font(.system(size: 34, weight: .bold))
+                                .foregroundColor("#FFFFFF")
+                        }
+                    }
+                    .padding(16)
+                }
+                .glassEffect(opacity: 0.85, blurRadius: acrylicBlurRadius, edgeBrightness: 1.2, noise: 0.03)
+                .cornerRadius(12)
+
+                // Keypad Matrix (5 Rows, Perfectly Aligned Without Overlap)
+                VStack(spacing: 8) {
+                    // Row 1: Function Keys
+                    HStack(spacing: 8) {
+                        Button(title: "C", action: { onClearPressed() }).buttonStyle(.danger)
+                        Button(title: "±", action: { onToggleSign() }).buttonStyle(.secondary)
+                        Button(title: "%", action: { onPercentage() }).buttonStyle(.secondary)
+                        Button(title: "÷", action: { onOperationPressed(op: "÷") }).buttonStyle(.accent)
+                    }
+
+                    // Row 2: 7, 8, 9, Multiply
+                    HStack(spacing: 8) {
+                        Button(title: "7", action: { onDigitPressed(digit: "7") }).buttonStyle(.glass)
+                        Button(title: "8", action: { onDigitPressed(digit: "8") }).buttonStyle(.glass)
+                        Button(title: "9", action: { onDigitPressed(digit: "9") }).buttonStyle(.glass)
+                        Button(title: "×", action: { onOperationPressed(op: "×") }).buttonStyle(.accent)
+                    }
+
+                    // Row 3: 4, 5, 6, Subtract
+                    HStack(spacing: 8) {
+                        Button(title: "4", action: { onDigitPressed(digit: "4") }).buttonStyle(.glass)
+                        Button(title: "5", action: { onDigitPressed(digit: "5") }).buttonStyle(.glass)
+                        Button(title: "6", action: { onDigitPressed(digit: "6") }).buttonStyle(.glass)
+                        Button(title: "-", action: { onOperationPressed(op: "-") }).buttonStyle(.accent)
+                    }
+
+                    // Row 4: 1, 2, 3, Add
+                    HStack(spacing: 8) {
+                        Button(title: "1", action: { onDigitPressed(digit: "1") }).buttonStyle(.glass)
+                        Button(title: "2", action: { onDigitPressed(digit: "2") }).buttonStyle(.glass)
+                        Button(title: "3", action: { onDigitPressed(digit: "3") }).buttonStyle(.glass)
+                        Button(title: "+", action: { onOperationPressed(op: "+") }).buttonStyle(.accent)
+                    }
+
+                    // Row 5: 0, Decimal Point, Equals
+                    HStack(spacing: 8) {
+                        Button(title: "0", action: { onDigitPressed(digit: "0") }).buttonStyle(.glass)
+                        Button(title: "00", action: { onDigitPressed(digit: "00") }).buttonStyle(.glass)
+                        Button(title: ".", action: { onDecimalPressed() }).buttonStyle(.secondary)
+                        Button(title: "=", action: { onEqualsPressed() }).buttonStyle(.primary)
+                    }
+                }
+            }
+            .padding(18)
+        };
+    }
+}

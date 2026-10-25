@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=Spatial Audio & Media
+Comment=Pemutar Audio Latensi Rendah & DSP HRTF 3D
+Exec=dmedia
+Icon=org.daxos.media
+Terminal=false
+Categories=AudioVideo;Audio;Player;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.media
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

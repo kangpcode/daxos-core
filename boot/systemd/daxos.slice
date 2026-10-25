@@ -1,0 +1,16 @@
+# ==============================================================================
+# DAXOS SYSTEMD CGROUP V2 ROOT SLICE
+# File: boot/systemd/daxos.slice
+# ==============================================================================
+[Unit]
+Description=DAXOS Modern Hybrid Operating System Root Slice
+Documentation=file:///home/kangpcode/wwwsite/daxos/CLAUDE.md
+Before=slices.target
+
+[Slice]
+CPUAccounting=yes
+MemoryAccounting=yes
+IOAccounting=yes
+TasksAccounting=yes
+IOWeight=100
+CPUWeight=100

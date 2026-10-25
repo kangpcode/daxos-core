@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=dEdit Code & Text
+Comment=Editor Teks Ringan & Berperforma Tinggi
+Exec=dedit
+Icon=org.daxos.editor
+Terminal=false
+Categories=Utility;TextEditor;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.editor
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

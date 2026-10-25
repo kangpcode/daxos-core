@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=DCODX Developer Studio
+Comment=IDE Terintegrasi, Compiler & Debugger DAXOS
+Exec=dcodx studio
+Icon=org.daxos.dcodx-ide
+Terminal=false
+Categories=Development;IDE;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.dcodx-ide
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

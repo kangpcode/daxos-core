@@ -1,0 +1,9 @@
+[package]
+name = "duraserv"
+version = "1.10.2026"
+authors = ["Dhafa Nazula Permadi <kangpcode@daxos.org>"]
+edition = "2024"
+
+[dependencies]
+drex-ui = { path = "../../crates/drex-ui" }
+drex-sdk = { path = "../../crates/drex-sdk" }

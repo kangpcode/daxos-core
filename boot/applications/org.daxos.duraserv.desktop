@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=DuraServ
+GenericName=Web Server & Developer Stack
+Comment=All-in-One Web Server & Database Stack (Laragon & FlyEnv Parity)
+Exec=duraserv
+Icon=org.daxos.duraserv
+Terminal=false
+Categories=Development;WebDevelopment;Server;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.duraserv
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

@@ -1,0 +1,186 @@
+// ============================================================================
+// DAXOS FILES (FINDER) APPLICATION
+// File: examples/files/src/main.surf
+// Language: Surflang 1.0 (Declarative DreXUI Component)
+// Lead Architect: Dhafa Nazula Permadi (@kangpcode)
+// Strictly ZERO EMOJIS - Production Grade
+// ============================================================================
+
+module daxos.files;
+
+component FilesApp: Component {
+    @State var currentFolder: String = "Documents";
+    @State var viewMode: String = "grid"; // "grid" | "list"
+    @State var selectedItem: String = "Research.pdf";
+    @State var selectedSize: String = "4.2 MB";
+    @State var acrylicBlur: Float = 28.0;
+    @State var freeDiskSpaceGb: Float = 412.5;
+    @State var totalDiskSpaceGb: Float = 1000.0;
+
+    func navigateTo(folder: String) {
+        currentFolder = folder;
+    }
+
+    func selectFile(filename: String, sizeStr: String) {
+        selectedItem = filename;
+        selectedSize = sizeStr;
+    }
+
+    func body() -> ViewNode {
+        return Card {
+            HStack(spacing: 0) {
+                // macOS Style Sidebar (Translucent Acrylic Vibrancy)
+                Box {
+                    VStack(alignment: .leading, spacing: 14) {
+                        // Traffic Lights Chrome
+                        HStack(spacing: 6) {
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FF5F56")
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FFBD2E")
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#27C93F")
+                        }
+                        .padding(8)
+
+                        // Favorites Section
+                        Text("Favorites")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundColor("#7E7E8A")
+
+                        VStack(alignment: .leading, spacing: 6) {
+                            Button(title: "Applications", action: { navigateTo(folder: "Applications") })
+                                .buttonStyle(currentFolder == "Applications" ? .sidebarActive : .sidebar)
+                            Button(title: "Documents", action: { navigateTo(folder: "Documents") })
+                                .buttonStyle(currentFolder == "Documents" ? .sidebarActive : .sidebar)
+                            Button(title: "Downloads", action: { navigateTo(folder: "Downloads") })
+                                .buttonStyle(currentFolder == "Downloads" ? .sidebarActive : .sidebar)
+                            Button(title: "Pictures", action: { navigateTo(folder: "Pictures") })
+                                .buttonStyle(currentFolder == "Pictures" ? .sidebarActive : .sidebar)
+                        }
+
+                        // DaxCloud Section
+                        Text("DaxCloud")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundColor("#7E7E8A")
+
+                        VStack(alignment: .leading, spacing: 6) {
+                            Button(title: "DaxDrive", action: { navigateTo(folder: "DaxDrive") })
+                                .buttonStyle(currentFolder == "DaxDrive" ? .sidebarActive : .sidebar)
+                        }
+
+                        Spacer()
+
+                        // Storage Capacity Bar
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(String(freeDiskSpaceGb) + " GB free of " + String(totalDiskSpaceGb) + " GB")
+                                .font(.system(size: 10, weight: .medium))
+                                .foregroundColor("#888888")
+                            Box().frame(width: 150, height: 4).cornerRadius(2).backgroundColor("#30D158")
+                        }
+                    }
+                    .padding(14)
+                }
+                .frame(width: 180)
+                .glassEffect(opacity: 0.75, blurRadius: acrylicBlur, edgeBrightness: 1.0, noise: 0.02)
+
+                // Main Content File Browser Pane
+                Box {
+                    VStack(spacing: 0) {
+                        // Toolbar & Breadcrumbs
+                        HStack(spacing: 12) {
+                            Button(title: "Back", action: { }).buttonStyle(.secondary)
+                            Button(title: "Forward", action: { }).buttonStyle(.secondary)
+                            Text("DAXOS HD > " + currentFolder)
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundColor("#E5E5E5")
+                            Spacer()
+                            Button(title: "Grid", action: { viewMode = "grid" })
+                                .buttonStyle(viewMode == "grid" ? .accent : .glass)
+                            Button(title: "List", action: { viewMode = "list" })
+                                .buttonStyle(viewMode == "list" ? .accent : .glass)
+                        }
+                        .padding(12)
+                        .glassEffect(opacity: 0.6, blurRadius: 16.0, edgeBrightness: 1.0, noise: 0.0)
+
+                        // File Grid View (Cleanly Spaced Cards)
+                        HStack(spacing: 16) {
+                            // File 1
+                            Box {
+                                VStack(spacing: 8) {
+                                    Box().frame(width: 56, height: 56).cornerRadius(10).backgroundColor("#2A2D3A")
+                                    Text("Project.toml").font(.system(size: 12, weight: .medium)).foregroundColor("#DDDDDD")
+                                    Text("2.4 KB").font(.system(size: 10)).foregroundColor("#888888")
+                                    Button(title: "Select", action: { selectFile(filename: "Project.toml", sizeStr: "2.4 KB") })
+                                        .buttonStyle(.glass)
+                                }
+                                .padding(10)
+                            }
+                            .cornerRadius(10)
+                            .backgroundColor(selectedItem == "Project.toml" ? "rgba(0, 122, 255, 0.2)" : "transparent")
+
+                            // File 2
+                            Box {
+                                VStack(spacing: 8) {
+                                    Box().frame(width: 56, height: 56).cornerRadius(10).backgroundColor("#3B4252")
+                                    Text("Research.pdf").font(.system(size: 12, weight: .medium)).foregroundColor("#DDDDDD")
+                                    Text("4.2 MB").font(.system(size: 10)).foregroundColor("#888888")
+                                    Button(title: "Select", action: { selectFile(filename: "Research.pdf", sizeStr: "4.2 MB") })
+                                        .buttonStyle(.glass)
+                                }
+                                .padding(10)
+                            }
+                            .cornerRadius(10)
+                            .backgroundColor(selectedItem == "Research.pdf" ? "rgba(0, 122, 255, 0.2)" : "transparent")
+
+                            // File 3
+                            Box {
+                                VStack(spacing: 8) {
+                                    Box().frame(width: 56, height: 56).cornerRadius(10).backgroundColor("#434C5E")
+                                    Text("Design.fig").font(.system(size: 12, weight: .medium)).foregroundColor("#DDDDDD")
+                                    Text("18.6 MB").font(.system(size: 10)).foregroundColor("#888888")
+                                    Button(title: "Select", action: { selectFile(filename: "Design.fig", sizeStr: "18.6 MB") })
+                                        .buttonStyle(.glass)
+                                }
+                                .padding(10)
+                            }
+                            .cornerRadius(10)
+                            .backgroundColor(selectedItem == "Design.fig" ? "rgba(0, 122, 255, 0.2)" : "transparent")
+
+                            // File 4
+                            Box {
+                                VStack(spacing: 8) {
+                                    Box().frame(width: 56, height: 56).cornerRadius(10).backgroundColor("#1E293B")
+                                    Text("Kernel.patch").font(.system(size: 12, weight: .medium)).foregroundColor("#DDDDDD")
+                                    Text("128 KB").font(.system(size: 10)).foregroundColor("#888888")
+                                    Button(title: "Select", action: { selectFile(filename: "Kernel.patch", sizeStr: "128 KB") })
+                                        .buttonStyle(.glass)
+                                }
+                                .padding(10)
+                            }
+                            .cornerRadius(10)
+                            .backgroundColor(selectedItem == "Kernel.patch" ? "rgba(0, 122, 255, 0.2)" : "transparent")
+                        }
+                        .padding(18)
+
+                        Spacer()
+
+                        // Item Inspector Status Bar
+                        HStack(spacing: 14) {
+                            Text("Selected: " + selectedItem)
+                                .font(.system(size: 11, weight: .semibold))
+                                .foregroundColor("#FFFFFF")
+                            Text("Size: " + selectedSize)
+                                .font(.system(size: 11))
+                                .foregroundColor("#94A3B8")
+                            Spacer()
+                            Text("SHA3-512 Verified")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundColor("#30D158")
+                        }
+                        .padding(10)
+                        .backgroundColor("rgba(0,0,0,0.25)")
+                    }
+                }
+                .glassEffect(opacity: 0.85, blurRadius: acrylicBlur, edgeBrightness: 1.1, noise: 0.02)
+            }
+        };
+    }
+}

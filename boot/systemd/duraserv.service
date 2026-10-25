@@ -1,0 +1,31 @@
+# ==============================================================================
+# DAXOS SYSTEMD SERVICE: DURASERV WEB SERVER & DEVELOPER STACK ORCHESTRATOR
+# File: boot/systemd/duraserv.service
+# ==============================================================================
+[Unit]
+Description=DuraServ Web Server, Databases & Multi-Runtime Orchestrator (Laragon & FlyEnv Parity)
+Documentation=file:///home/kangpcode/wwwsite/daxos/examples/duraserv/README.md
+After=dax-netd.service dax-storaged.service
+Wants=dax-netd.service
+PartOf=daxos.target
+
+[Service]
+Type=simple
+Slice=daxos-system.slice
+ExecStart=/usr/bin/duraserv daemon
+Restart=always
+RestartSec=2
+StandardOutput=journal
+StandardError=journal
+
+# Security Isolation & Hardening
+User=root
+Group=root
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/var/www/html /var/lib/duraserv /run/duraserv /tmp
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_SETUID CAP_SETGID
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=daxos.target

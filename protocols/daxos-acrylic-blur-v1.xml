@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="daxos_acrylic_blur_v1">
+  <copyright>
+    Copyright © 2026 DAXOS Operating System Core Team.
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction.
+  </copyright>
+
+  <interface name="zxdg_daxos_acrylic_manager_v1" version="1">
+    <description summary="manages acrylic blur effects for wayland surfaces">
+      Global interface exposed by drex-compositor to bind real-time acrylic frosted
+      glass blur effects to application surfaces without screen-tearing.
+    </description>
+
+    <request name="destroy" type="destructor">
+      <description summary="destroy manager object">
+        Destroys the manager object. Existing acrylic surface objects remain active.
+      </description>
+    </request>
+
+    <request name="get_acrylic_surface">
+      <description summary="create an acrylic blur handle for a surface">
+        Creates a zxdg_daxos_acrylic_surface_v1 object associated with the specified wl_surface.
+      </description>
+      <arg name="id" type="new_id" interface="zxdg_daxos_acrylic_surface_v1"/>
+      <arg name="surface" type="object" interface="wl_surface"/>
+    </request>
+  </interface>
+
+  <interface name="zxdg_daxos_acrylic_surface_v1" version="1">
+    <description summary="acrylic blur interface for a specific surface">
+      Allows setting parameters such as opacity, blur radius, edge brightness, and noise.
+    </description>
+
+    <enum name="error">
+      <entry name="invalid_radius" value="0" summary="blur radius exceeds maximum 128px"/>
+      <entry name="invalid_opacity" value="1" summary="opacity value out of range [0.0, 1.0]"/>
+      <entry name="already_constructed" value="2" summary="acrylic surface already bound to wl_surface"/>
+    </enum>
+
+    <request name="destroy" type="destructor">
+      <description summary="remove acrylic blur effect from surface">
+        Destroys the acrylic effect object and restores standard compositing for the wl_surface.
+      </description>
+    </request>
+
+    <request name="set_blur_radius">
+      <description summary="set gaussian/kawase blur radius in pixels">
+        Specifies the blur radius in physical pixels [0 .. 128].
+      </description>
+      <arg name="radius_px" type="uint"/>
+    </request>
+
+    <request name="set_opacity">
+      <description summary="set material glass opacity">
+        Specifies surface opacity in fixed-point format (wl_fixed_t) between 0.05 and 1.0.
+      </description>
+      <arg name="opacity" type="fixed"/>
+    </request>
+
+    <request name="set_edge_brightness">
+      <description summary="set edge specular highlight intensity">
+        Specifies edge highlight multiplier in fixed-point [0.0 .. 2.0].
+      </description>
+      <arg name="brightness" type="fixed"/>
+    </request>
+
+    <request name="set_noise_intensity">
+      <description summary="set procedural acrylic grain texture intensity">
+        Specifies noise grain intensity in fixed-point [0.0 .. 1.0].
+      </description>
+      <arg name="noise" type="fixed"/>
+    </request>
+
+    <request name="commit">
+      <description summary="apply pending acrylic parameter modifications">
+        Atomically commits blur parameters to the compositor frame graph.
+      </description>
+    </request>
+
+    <event name="parameters_applied">
+      <description summary="notifies client that parameters took effect on screen">
+        Sent by the compositor after the new acrylic parameters are rendered.
+      </description>
+      <arg name="frame_counter" type="uint"/>
+    </event>
+  </interface>
+</protocol>

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=DapStore Market
+Comment=Toko Aplikasi Terverifikasi & Manajemen Paket .dapp
+Exec=dax stats
+Icon=org.daxos.store
+Terminal=false
+Categories=System;PackageManager;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.store
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

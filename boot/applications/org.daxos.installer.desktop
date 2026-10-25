@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=Install DAXOS
+Comment=Pemasang Sistem Operasi Hybrid DAXOS
+Exec=dax-installer
+Icon=org.daxos.installer
+Terminal=false
+Categories=System;Installation;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.installer
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

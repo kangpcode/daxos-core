@@ -1,0 +1,27 @@
+[Unit]
+Description=DAXOS Application Sandbox Manager Daemon (dap-sandboxd)
+Documentation=file:///home/kangpcode/wwwsite/daxos/docs/FASE_1_ARSITEKTUR_SISTEM_TERPADU.md
+After=dap-registryd.service
+Requires=dap-registryd.service
+
+[Service]
+Type=notify
+Slice=daxos-system.slice
+ExecStart=/usr/bin/dap-sandboxd --socket /run/daxos/sandbox.sock --cgroup-root /sys/fs/cgroup/dapp
+Restart=always
+RestartSec=200ms
+TimeoutStopSec=10s
+
+# Security Attributes
+User=root
+Group=root
+RuntimeDirectory=daxos/sandbox
+RuntimeDirectoryMode=0755
+CapabilityBoundingSet=CAP_SYS_ADMIN CAP_SETUID CAP_SETGID CAP_CHOWN CAP_DAC_OVERRIDE CAP_SYS_RESOURCE
+NoNewPrivileges=no
+Delegate=yes
+TasksMax=16384
+MemoryMax=8G
+
+[Install]
+WantedBy=multi-user.target

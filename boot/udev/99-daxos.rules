@@ -1,0 +1,21 @@
+# ==============================================================================
+# DAXOS SYSTEM UDEV RULES
+# File: boot/udev/99-daxos.rules
+# Purpose: Permissions for NTSync, DreX-Boost, Security LSM, and Wayland DRM/KMS
+# ==============================================================================
+
+# In-kernel NTSync Fast-Path primitive for Direct3D and Proton synchronization
+KERNEL=="ntsync", MODE="0666", GROUP="users"
+
+# DreX-Boost latency budget and scheduler governor node
+KERNEL=="daxos_boost", MODE="0666", GROUP="users"
+
+# In-kernel Root-of-Trust and Landlock integrity auditor
+KERNEL=="daxos_sec", MODE="0660", GROUP="root"
+
+# DRM / KMS direct acceleration devices
+KERNEL=="card[0-9]*", SUBSYSTEM=="drm", MODE="0666", GROUP="video"
+KERNEL=="renderD[0-9]*", SUBSYSTEM=="drm", MODE="0666", GROUP="render"
+
+# Real-time user input devices
+KERNEL=="uinput", SUBSYSTEM=="misc", MODE="0660", GROUP="input"

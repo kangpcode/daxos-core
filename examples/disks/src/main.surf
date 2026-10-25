@@ -1,0 +1,207 @@
+// ============================================================================
+// DAXOS DISK UTILITY & STORAGE MANAGER (dDisk GUI)
+// File: examples/disks/src/main.surf
+// Language: Surflang 1.0 (Declarative DreXUI Component)
+// Lead Architect: Dhafa Nazula Permadi (@kangpcode)
+// Strictly ZERO EMOJIS - Production Grade
+// ============================================================================
+
+module daxos.disks;
+
+component DisksApp: Component {
+    @State var selectedDisk: String = "nvme0n1";
+    @State var diskModel: String = "DAXOS NVMe 1TB PCIe 5.0 SSD";
+    @State var totalCapacityGb: Float = 1000.0;
+    @State var usedSpaceGb: Float = 284.5;
+    @State var freeSpaceGb: Float = 715.5;
+    @State var smartStatus: String = "Verified - Healthy (100%)";
+    @State var temperatureC: Float = 38.0;
+    @State var acrylicBlur: Float = 32.0;
+
+    func onSelectDisk(diskId: String) {
+        selectedDisk = diskId;
+    }
+
+    func onRunDiagnostics() {
+        smartStatus = "Self-Test Passed (0 Errors)";
+    }
+
+    func body() -> ViewNode {
+        return Card {
+            VStack(spacing: 0) {
+                // Header & Chrome
+                Box {
+                    HStack(spacing: 12) {
+                        HStack(spacing: 6) {
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FF5F56")
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FFBD2E")
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#27C93F")
+                        }
+                        .padding(6)
+
+                        Text("Disk Utility (dDisk)")
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundColor("#FFFFFF")
+
+                        Spacer()
+
+                        Button(title: "First Aid / SMART", action: { onRunDiagnostics() })
+                            .buttonStyle(.accent)
+                        Button(title: "Partition", action: { })
+                            .buttonStyle(.glass)
+                        Button(title: "Erase", action: { })
+                            .buttonStyle(.danger)
+                    }
+                    .padding(10)
+                }
+                .glassEffect(opacity: 0.85, blurRadius: 20.0, edgeBrightness: 1.1, noise: 0.02)
+
+                // Master-Detail Layout
+                HStack(spacing: 0) {
+                    // Left Sidebar (Disks & Volumes)
+                    Box {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Internal Disks")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor("#7E7E8A")
+
+                            VStack(alignment: .leading, spacing: 6) {
+                                Button(title: "nvme0n1 (PCIe 5.0)", action: { onSelectDisk(diskId: "nvme0n1") })
+                                    .buttonStyle(selectedDisk == "nvme0n1" ? .sidebarActive : .sidebar)
+                                Button(title: "  EFI System (1GB)", action: { })
+                                    .buttonStyle(.sidebar)
+                                Button(title: "  DAXOS Root A (32GB)", action: { })
+                                    .buttonStyle(.sidebar)
+                                Button(title: "  DAXOS Root B (32GB)", action: { })
+                                    .buttonStyle(.sidebar)
+                                Button(title: "  User Data (935GB)", action: { })
+                                    .buttonStyle(.sidebar)
+                            }
+
+                            Text("External Drives")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor("#7E7E8A")
+
+                            Button(title: "DaXDrop USB (64GB)", action: { onSelectDisk(diskId: "sda1") })
+                                .buttonStyle(selectedDisk == "sda1" ? .sidebarActive : .sidebar)
+
+                            Spacer()
+
+                            // Disk Health Pill
+                            HStack {
+                                Text("Temp: " + String(temperatureC) + " °C")
+                                    .font(.system(size: 10, weight: .semibold))
+                                    .foregroundColor("#30D158")
+                            }
+                            .padding(6)
+                        }
+                        .padding(12)
+                    }
+                    .frame(width: 200)
+                    .glassEffect(opacity: 0.75, blurRadius: acrylicBlur, edgeBrightness: 1.0, noise: 0.02)
+
+                    // Right Storage Details Pane
+                    Box {
+                        VStack(alignment: .leading, spacing: 14) {
+                            HStack(spacing: 12) {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(diskModel)
+                                        .font(.system(size: 16, weight: .bold))
+                                        .foregroundColor("#FFFFFF")
+                                    Text("GUID Partition Table (GPT) • NVMe High-Speed Bus")
+                                        .font(.system(size: 11))
+                                        .foregroundColor("#888899")
+                                }
+                                Spacer()
+                                Text(smartStatus)
+                                    .font(.system(size: 11, weight: .semibold))
+                                    .foregroundColor("#30D158")
+                            }
+
+                            // Storage Bar Visualization (Segmented partition bar)
+                            Box {
+                                HStack(spacing: 4) {
+                                    Box {
+                                        Text("Root A (32G)").font(.system(size: 9, weight: .bold)).foregroundColor("#000000")
+                                    }
+                                    .frame(width: 90, height: 20)
+                                    .backgroundColor("#00D2FF")
+                                    .cornerRadius(4)
+
+                                    Box {
+                                        Text("Root B (32G)").font(.system(size: 9, weight: .bold)).foregroundColor("#000000")
+                                    }
+                                    .frame(width: 90, height: 20)
+                                    .backgroundColor("#BF5AF2")
+                                    .cornerRadius(4)
+
+                                    Box {
+                                        Text("Data Btrfs (220G)").font(.system(size: 9, weight: .bold)).foregroundColor("#000000")
+                                    }
+                                    .frame(width: 140, height: 20)
+                                    .backgroundColor("#30D158")
+                                    .cornerRadius(4)
+
+                                    Spacer()
+                                }
+                            }
+                            .padding(4)
+                            .glassEffect(opacity: 0.5, blurRadius: 10.0, edgeBrightness: 0.9, noise: 0.0)
+
+                            HStack(spacing: 24) {
+                                Text("Used: " + String(usedSpaceGb) + " GB")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundColor("#E5E9F0")
+                                Text("Free: " + String(freeSpaceGb) + " GB")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundColor("#30D158")
+                                Spacer()
+                                Text("Total Capacity: " + String(totalCapacityGb) + " GB")
+                                    .font(.system(size: 12))
+                                    .foregroundColor("#888899")
+                            }
+
+                            // Structured Partition Table (With crisp headers and neat row alignment)
+                            Box {
+                                VStack(spacing: 8) {
+                                    HStack {
+                                        Box().frame(width: 100).child(Text("Mount Point").font(.system(size: 11, weight: .bold)).foregroundColor("#888899"))
+                                        Box().frame(width: 150).child(Text("File System").font(.system(size: 11, weight: .bold)).foregroundColor("#888899"))
+                                        Box().frame(width: 130).child(Text("Encryption").font(.system(size: 11, weight: .bold)).foregroundColor("#888899"))
+                                        Spacer()
+                                        Text("Status").font(.system(size: 11, weight: .bold)).foregroundColor("#888899")
+                                    }
+                                    .padding(6)
+
+                                    HStack {
+                                        Box().frame(width: 100).child(Text("/").font(.monospaced(size: 12)).foregroundColor("#FFFFFF"))
+                                        Box().frame(width: 150).child(Text("EROFS (dm-verity)").font(.system(size: 11)).foregroundColor("#00D2FF"))
+                                        Box().frame(width: 130).child(Text("XTS-AES-512").font(.system(size: 11)).foregroundColor("#30D158"))
+                                        Spacer()
+                                        Text("Verified Active").font(.system(size: 11, weight: .semibold)).foregroundColor("#30D158")
+                                    }
+                                    .padding(6)
+
+                                    HStack {
+                                        Box().frame(width: 100).child(Text("/home").font(.monospaced(size: 12)).foregroundColor("#FFFFFF"))
+                                        Box().frame(width: 150).child(Text("Btrfs + zstd").font(.system(size: 11)).foregroundColor("#00D2FF"))
+                                        Box().frame(width: 130).child(Text("fscrypt TPM2").font(.system(size: 11)).foregroundColor("#30D158"))
+                                        Spacer()
+                                        Text("Mounted Read-Write").font(.system(size: 11, weight: .semibold)).foregroundColor("#30D158")
+                                    }
+                                    .padding(6)
+                                }
+                                .padding(10)
+                            }
+                            .glassEffect(opacity: 0.7, blurRadius: 16.0, edgeBrightness: 1.0, noise: 0.01)
+
+                            Spacer()
+                        }
+                        .padding(16)
+                    }
+                    .glassEffect(opacity: 0.85, blurRadius: acrylicBlur, edgeBrightness: 1.1, noise: 0.02)
+                }
+            }
+        };
+    }
+}

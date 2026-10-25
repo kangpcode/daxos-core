@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=DaxFont Typography Studio
+Comment=Manajer Tipografi, Font Renderer & Glyphs Inspector
+Exec=dfont
+Icon=org.daxos.font
+Terminal=false
+Categories=Graphics;Viewer;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.font
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

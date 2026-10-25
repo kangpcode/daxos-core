@@ -1,0 +1,135 @@
+// ============================================================================
+// DCODX INTEGRATED DEVELOPMENT ENVIRONMENT (IDE)
+// File: examples/dcodx-ide/src/main.surf
+// Language: Surflang 1.0 (Declarative DreXUI Component)
+// Lead Architect: Dhafa Nazula Permadi (@kangpcode)
+// Strictly ZERO EMOJIS - Production Grade
+// ============================================================================
+
+module daxos.ide;
+
+component IdeApp: Component {
+    @State var activeProject: String = "DAXOS_Calculator";
+    @State var activeTab: String = "main.surf";
+    @State var compilerStatus: String = "Affine Checker: 0 errors, 120Hz Hot-Reload Ready";
+    @State var framerateHz: Float = 120.0;
+    @State var renderLatencyMs: Float = 0.0004;
+    @State var isProfiling: Bool = true;
+    @State var targetBundle: String = "Universal .dapp";
+
+    func onTriggerBuild() {
+        compilerStatus = "Building Universal .dapp (x86_64 + ARM64 fat binary)...";
+    }
+
+    func onTriggerHotReload() {
+        compilerStatus = "DreXUI Hot-Reload synced in 1.2ms!";
+    }
+
+    func body() -> ViewNode {
+        return Card {
+            VStack(spacing: 0) {
+                // IDE Top Toolbar
+                HStack(spacing: 12) {
+                    Text("DCODX Studio")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundColor("#00D2FF")
+
+                    Button(title: "Build .dapp", action: { onTriggerBuild() })
+                        .buttonStyle(.accent)
+
+                    Button(title: "Hot-Reload", action: { onTriggerHotReload() })
+                        .buttonStyle(.secondary)
+
+                    Spacer()
+
+                    Text("FPS: 120.0 | Latency: 0.0004ms | GPU: DreXVIS Vulkan")
+                        .font(.system(size: 11, family: "monospace"))
+                        .foregroundColor("#30D158")
+                }
+                .padding(10)
+                .backgroundColor("#1A1C26")
+
+                // Main IDE Work Area (3-Pane Architecture)
+                HStack(spacing: 0) {
+                    // Left Project Explorer
+                    Box {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("PROJECT EXPLORER")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundColor("#7E7E94")
+
+                            Button(title: "Project.toml", action: { })
+                                .buttonStyle(.sidebar)
+                            Button(title: "manifest.toml", action: { })
+                                .buttonStyle(.sidebar)
+                            Button(title: "src/main.surf", action: { })
+                                .buttonStyle(.sidebarActive)
+                            Button(title: "shaders/glass.spv", action: { })
+                                .buttonStyle(.sidebar)
+
+                            Spacer()
+
+                            Text("Target: Universal Fat")
+                                .font(.system(size: 10))
+                                .foregroundColor("#A0A0B0")
+                        }
+                        .padding(12)
+                    }
+                    .frame(width: 190)
+                    .backgroundColor("#141620")
+
+                    // Center Code Editor
+                    Box {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("// Surflang 1.0 -- DreXUI Reactive Component")
+                                .font(.system(size: 12, family: "monospace"))
+                                .foregroundColor("#7E7E94")
+                            Text("module daxos.app;\n\ncomponent MainWindow: Component {\n    @State var acrylicBlur: Float = 36.0;\n\n    func body() -> ViewNode {\n        return Card {\n            Text(\"Hello DAXOS 1.0!\")\n        };\n    }\n}")
+                                .font(.system(size: 12, family: "monospace"))
+                                .foregroundColor("#E0E0E8")
+
+                            Spacer()
+
+                            // Status Bar
+                            HStack {
+                                Text(compilerStatus)
+                                    .font(.system(size: 11, family: "monospace"))
+                                    .foregroundColor("#00D2FF")
+                            }
+                            .padding(6)
+                        }
+                        .padding(14)
+                    }
+                    .backgroundColor("#0F1018")
+
+                    // Right Live UI Canvas Preview
+                    Box {
+                        VStack(spacing: 12) {
+                            Text("LIVE DREXUI PREVIEW (120Hz)")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundColor("#7E7E94")
+
+                            Box {
+                                VStack(spacing: 8) {
+                                    Text("DAXOS Interactive Card")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundColor("#FFFFFF")
+                                    Button(title: "Click Preview", action: { })
+                                        .buttonStyle(.accent)
+                                }
+                                .padding(16)
+                            }
+                            .glassEffect(opacity: 0.85, blurRadius: 36.0, edgeBrightness: 1.15, noise: 0.03)
+                            .cornerRadius(12)
+
+                            Spacer()
+                        }
+                        .padding(14)
+                    }
+                    .frame(width: 260)
+                    .backgroundColor("#161824")
+                }
+            }
+        };
+    }
+}

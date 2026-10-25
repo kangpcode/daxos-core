@@ -1,0 +1,14 @@
+# ==============================================================================
+# DAXOS SYSTEMD PRIMARY OS TARGET
+# File: boot/systemd/daxos.target
+# ==============================================================================
+[Unit]
+Description=DAXOS Modern Hybrid Operating System Target
+Documentation=file:///home/kangpcode/wwwsite/daxos/CLAUDE.md
+Wants=dap-registryd.socket dap-sandboxd.socket duraserv.service daxos-autostart.service
+Requires=daxos-kernel-modules.service dap-registryd.service dap-sandboxd.service dap-updated.service drex-boostd.service drex-compositor.service dax-sysmon.service dax-netd.service dax-sec.service dax-audiod.service dax-disks.service daxdrop.service dap-compat.service dax-pkgd.service dax-powerd.service dax-bluetoothd.service
+After=daxos-kernel-modules.service dap-registryd.service dap-sandboxd.service dap-updated.service drex-boostd.service drex-compositor.service dax-sysmon.service dax-netd.service dax-sec.service dax-audiod.service dax-disks.service daxdrop.service dap-compat.service dax-pkgd.service dax-powerd.service dax-bluetoothd.service duraserv.service daxos-autostart.service
+AllowIsolate=yes
+
+[Install]
+WantedBy=default.target

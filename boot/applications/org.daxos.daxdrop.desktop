@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=DaXDrop AirShare
+Comment=Berbagi Berkas Cepat P2P & Deteksi Gesture
+Exec=daxdrop
+Icon=org.daxos.daxdrop
+Terminal=false
+Categories=Network;FileTransfer;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.daxdrop
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

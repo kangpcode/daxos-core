@@ -1,0 +1,104 @@
+// ============================================================================
+// DAXOS TERMINAL APPLICATION (dsh / daxsh GUI)
+// File: examples/terminal/src/main.surf
+// Language: Surflang 1.0 (Declarative DreXUI Component)
+// Lead Architect: Dhafa Nazula Permadi (@kangpcode)
+// Strictly ZERO EMOJIS - Production Grade
+// ============================================================================
+
+module daxos.terminal;
+
+component TerminalApp: Component {
+    @State var currentDir: String = "~";
+    @State var promptPrefix: String = "daxos:~$ ";
+    @State var activeTab: String = "dsh-session-1";
+    @State var acrylicBlur: Float = 32.0;
+    @State var fontSize: Float = 13.5;
+    @State var historyOutput: String = "DAXOS Universal Operating System [Version 1.10.2026 'Rhino' (x86_64)]\nKernel: 6.12.0-daxos-hardened (Hybrid-Ring + Landlock v5 + Seccomp BPF)\nShell: DaxSH 1.2 / Zsh compatible | Compositor: DreX 120-240Hz ProMotion\nType 'help' or click quick commands below.\n\ndaxos:~$ uname -a\nDAXOS 6.12.0-daxos-hardened x86_64 GNU/Linux (DreXUI + Landlock v5)\n";
+
+    func onCommandSubmitted(cmd: String) {
+        historyOutput = historyOutput + "\n" + promptPrefix + cmd;
+        if cmd == "help" {
+            historyOutput = historyOutput + "\nAvailable commands: help, dcodx, uname, ps, clear, daxfetch, reboot, dfm, dcalc";
+        } else if cmd == "clear" {
+            historyOutput = "";
+        } else if cmd == "daxfetch" {
+            historyOutput = historyOutput + "\n  [DAXOS] 1.10.2026-ALPHA 'Rhino' (x86_64)\n  OS: DAXOS Universal Operating System\n  Kernel: 6.12.0-daxos-hardened\n  Compositor: DreX Compositor (Dual-Kawase Acrylic)\n  Graphics: DreXVIS Vulkan 1.3 / Direct DRM dma-buf\n  Package: .dapp (Sandboxed Universal Fat)\n  Memory: 4096MB / 16384MB (ZRAM active)";
+        }
+    }
+
+    func body() -> ViewNode {
+        return Card {
+            VStack(spacing: 0) {
+                // macOS Style Window Chrome & Tab Bar
+                Box {
+                    HStack(spacing: 8) {
+                        // Window Traffic Lights
+                        HStack(spacing: 6) {
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FF5F56") // Close
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FFBD2E") // Minimize
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#27C93F") // Zoom
+                        }
+                        .padding(8)
+
+                        Spacer()
+
+                        // Terminal Tab Title
+                        HStack(spacing: 6) {
+                            Text("dsh: " + activeTab)
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundColor("#E2E8F0")
+                        }
+
+                        Spacer()
+
+                        // Terminal Status Badge
+                        Text("[UTF-8 / PTY]")
+                            .font(.system(size: 11, family: "monospace"))
+                            .foregroundColor("#30D158")
+                    }
+                    .padding(8)
+                }
+                .backgroundColor("#1E1E28")
+                .cornerRadius(10)
+
+                // Quick Action Bar
+                HStack(spacing: 8) {
+                    Button(title: "daxfetch", action: { onCommandSubmitted(cmd: "daxfetch") })
+                        .buttonStyle(.glass)
+                    Button(title: "help", action: { onCommandSubmitted(cmd: "help") })
+                        .buttonStyle(.glass)
+                    Button(title: "clear", action: { onCommandSubmitted(cmd: "clear") })
+                        .buttonStyle(.glass)
+                    Spacer()
+                    Text("PTY PID: 14210")
+                        .font(.system(size: 10, family: "monospace"))
+                        .foregroundColor("#64748B")
+                }
+                .padding(8)
+                .backgroundColor("#141620")
+
+                // Acrylic Glass Terminal Body (Translucent Console)
+                Box {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(historyOutput)
+                            .font(.system(size: fontSize, family: "Menlo, Monaco, 'Courier New', monospace"))
+                            .foregroundColor("#33FF66")
+
+                        HStack {
+                            Text(promptPrefix)
+                                .font(.system(size: fontSize, family: "monospace"))
+                                .foregroundColor("#00D2FF")
+                            Text("▋")
+                                .font(.system(size: fontSize, family: "monospace"))
+                                .foregroundColor("#FFFFFF")
+                        }
+                    }
+                    .padding(14)
+                }
+                .glassEffect(opacity: 0.88, blurRadius: acrylicBlur, edgeBrightness: 1.1, noise: 0.01)
+                .cornerRadius(12)
+            }
+        };
+    }
+}

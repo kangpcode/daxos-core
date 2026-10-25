@@ -1,0 +1,43 @@
+[application]
+icon = "icon.svg"
+bundle_identifier = "org.daxos.dxdef"
+display_name = "DXDEF Security Center"
+version = "1.0.0"
+build_number = 1
+minimum_os_version = "1.0.0"
+
+[developer]
+id = "dev-kangpcode"
+legal_name = "Dhafa Nazula Permadi (DAXOS Core Security)"
+
+[sandbox]
+enforce = false
+network_isolation = "host"
+
+[permissions]
+required = [
+    "daxos.permission.SYSTEM_SECURITY",
+    "daxos.permission.EBPF_TELEMETRY",
+    "daxos.permission.TPM_HARDWARE",
+    "daxos.permission.LANDLOCK_SUPERVISOR"
+]
+optional = [
+    "daxos.permission.NETWORK_SOCKET"
+]
+
+[resources]
+max_memory_mb = 1024
+max_cpu_percent = 50
+max_file_descriptors = 4096
+
+[landlock_paths]
+read_write = [
+    "/sys/fs/bpf",
+    "/dev/tpmrm0",
+    "/var/log/dxdef"
+]
+read_only = [
+    "/proc",
+    "/sys",
+    "/etc"
+]

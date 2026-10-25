@@ -1,0 +1,20 @@
+# ==============================================================================
+# DAXOS SYSTEMD CGROUP V2 SYSTEM SERVICES SLICE
+# File: boot/systemd/daxos-system.slice
+# ==============================================================================
+[Unit]
+Description=DAXOS System Services & Core Daemons Slice
+Documentation=file:///home/kangpcode/wwwsite/daxos/docs/FASE_1_ARSITEKTUR_SISTEM_TERPADU.md
+PartOf=daxos.slice
+Before=slices.target
+
+[Slice]
+CPUAccounting=yes
+MemoryAccounting=yes
+IOAccounting=yes
+TasksAccounting=yes
+CPUWeight=500
+IOWeight=500
+MemoryMin=256M
+MemoryLow=512M
+TasksMax=32768

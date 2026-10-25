@@ -1,0 +1,26 @@
+[Unit]
+Description=DAXOS Atomic A/B OTA Updater Daemon (dap-updated)
+Documentation=file:///home/kangpcode/wwwsite/daxos/docs/FASE_6_BAGIAN_5_WAYLAND_BOOST_TRANSLASI_AB.md
+After=network.target dap-registryd.service
+Requires=dap-registryd.service
+
+[Service]
+Type=simple
+Slice=daxos-system.slice
+ExecStart=/usr/bin/dap-updated --config /etc/daxos/update.conf --socket /run/daxos/update.sock
+Restart=on-failure
+RestartSec=5s
+
+# Security and Isolation
+User=root
+Group=root
+ProtectSystem=full
+ProtectHome=yes
+PrivateTmp=yes
+CapabilityBoundingSet=CAP_SYS_ADMIN CAP_SYS_BOOT CAP_SYS_RAWIO CAP_NET_BIND_SERVICE
+IOSchedulingClass=idle
+IOSchedulingPriority=7
+CPUSchedulingPolicy=batch
+
+[Install]
+WantedBy=multi-user.target

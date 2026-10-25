@@ -1,0 +1,21 @@
+# ==============================================================================
+# DAXOS SYSTEMD SOCKET ACTIVATION: SANDBOX DAEMON
+# File: boot/systemd/dap-sandboxd.socket
+# ==============================================================================
+[Unit]
+Description=DAXOS Application Sandbox Manager Socket
+Documentation=file:///home/kangpcode/wwwsite/daxos/docs/FASE_1_ARSITEKTUR_SISTEM_TERPADU.md
+DefaultDependencies=no
+Before=sockets.target
+
+[Socket]
+ListenStream=/run/daxos/sandbox.sock
+SocketUser=root
+SocketGroup=root
+SocketMode=0660
+DirectoryMode=0755
+Accept=no
+Backlog=64
+
+[Install]
+WantedBy=sockets.target

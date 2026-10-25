@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-only
+obj-m += daxos_boost.o
+daxos_boost-y := drex_boost.o
+ccflags-y += -I$(src)/../../include

@@ -1,0 +1,283 @@
+// ============================================================================
+// DAXOS SYSTEM PREFERENCES APPLICATION
+// File: examples/preferences/src/main.surf
+// Language: Surflang 1.0 (Declarative DreXUI Component)
+// Lead Architect: Dhafa Nazula Permadi (@kangpcode)
+// Strictly ZERO EMOJIS - Production Grade
+// ============================================================================
+
+module daxos.preferences;
+
+component PreferencesApp: Component {
+    @State var glassOpacity: Float = 0.72;
+    @State var glassBlurRadius: Float = 36.0;
+    @State var masterGainDb: Float = 0.0;
+    @State var spatialAudioEnabled: Bool = true;
+    @State var activeChannel: String = "stable";
+    @State var refreshRateHz: Int = 120;
+    @State var statusMessage: String = "System configuration synchronized with Registry.";
+
+    func setOpacity(val: Float) {
+        glassOpacity = val;
+    }
+
+    func setBlurRadius(val: Float) {
+        glassBlurRadius = val;
+    }
+
+    func toggleSpatial() {
+        spatialAudioEnabled = !spatialAudioEnabled;
+    }
+
+    func setChannel(channel: String) {
+        activeChannel = channel;
+    }
+
+    func body() -> ViewNode {
+        return Card {
+            VStack(spacing: 20) {
+                // Header Bar & Window Chrome
+                HStack(spacing: 12) {
+                    HStack(spacing: 6) {
+                        Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FF5F56")
+                        Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FFBD2E")
+                        Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#27C93F")
+                    }
+                    .padding(4)
+
+                    Text("DAXOS System Preferences")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor("#FFFFFF")
+
+                    Spacer()
+
+                    Text("Active Slot: A")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundColor("#30D158")
+                }
+                .padding(4)
+
+                // Visual Glass & Compositor Controls
+                Box {
+                    VStack(alignment: .leading, spacing: 14) {
+                        HStack {
+                            Text("Dual-Kawase Acrylic Glass & Compositor")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor("#FFFFFF")
+                            Spacer()
+                            Text(String(refreshRateHz) + " Hz ProMotion")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor("#00D2FF")
+                        }
+
+                        // Opacity Control Row
+                        HStack(spacing: 16) {
+                            Text("Glass Opacity")
+                                .font(.system(size: 13))
+                                .foregroundColor("#CBD5E1")
+                            Spacer()
+                            Button(title: "65%", action: { setOpacity(val: 0.65) })
+                                .buttonStyle(glassOpacity == 0.65 ? .accent : .glass)
+                            Button(title: "72% (Default)", action: { setOpacity(val: 0.72) })
+                                .buttonStyle(glassOpacity == 0.72 ? .accent : .glass)
+                            Button(title: "85%", action: { setOpacity(val: 0.85) })
+                                .buttonStyle(glassOpacity == 0.85 ? .accent : .glass)
+                        }
+
+                        // Blur Radius Control Row
+                        HStack(spacing: 16) {
+                            Text("Blur Radius")
+                                .font(.system(size: 13))
+                                .foregroundColor("#CBD5E1")
+                            Spacer()
+                            Button(title: "24 px", action: { setBlurRadius(val: 24.0) })
+                                .buttonStyle(glassBlurRadius == 24.0 ? .accent : .glass)
+                            Button(title: "36 px (Smooth)", action: { setBlurRadius(val: 36.0) })
+                                .buttonStyle(glassBlurRadius == 36.0 ? .accent : .glass)
+                            Button(title: "48 px (Deep)", action: { setBlurRadius(val: 48.0) })
+                                .buttonStyle(glassBlurRadius == 48.0 ? .accent : .glass)
+                        }
+                    }
+                    .padding(16)
+                }
+                .glassEffect(opacity: glassOpacity, blurRadius: glassBlurRadius, edgeBrightness: 1.15, noise: 0.03)
+                .cornerRadius(12)
+
+                // Hardware Low-Latency Audio & HRTF DSP
+                Box {
+                    VStack(alignment: .leading, spacing: 14) {
+                        HStack {
+                            Text("Hardware Low-Latency Audio (PipeWire Native)")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor("#FFFFFF")
+                            Spacer()
+                            Text("Latency: 5.8 ms")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor("#30D158")
+                        }
+
+                        HStack(spacing: 16) {
+                            Text("Spatial Audio Virtualizer")
+                                .font(.system(size: 13))
+                                .foregroundColor("#CBD5E1")
+                            Spacer()
+                            Button(title: spatialAudioEnabled ? "ENABLED" : "DISABLED", action: { toggleSpatial() })
+                                .buttonStyle(spatialAudioEnabled ? .accent : .glass)
+                        }
+
+                        HStack(spacing: 16) {
+                            Text("Master Output Gain")
+                                .font(.system(size: 13))
+                                .foregroundColor("#CBD5E1")
+                            Spacer()
+                            Text(String(masterGainDb) + " dB")
+                                .font(.system(size: 13, weight: .bold))
+                                .foregroundColor("#00D2FF")
+                        }
+                    }
+                    .padding(16)
+                }
+                .glassEffect(opacity: glassOpacity, blurRadius: glassBlurRadius, edgeBrightness: 1.15, noise: 0.03)
+                .cornerRadius(12)
+
+                // Atomic A/B OTA Update Channel
+                Box {
+                    VStack(alignment: .leading, spacing: 14) {
+                        HStack {
+                            Text("Atomic A/B Update Channel")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor("#FFFFFF")
+                            Spacer()
+                            Text("Daemon: dap-updated")
+                                .font(.system(size: 11))
+                                .foregroundColor("#94A3B8")
+                        }
+
+                        HStack(spacing: 10) {
+                            Button(title: "Stable", action: { setChannel(channel: "stable") })
+                                .buttonStyle(activeChannel == "stable" ? .accent : .glass)
+                            Button(title: "Beta", action: { setChannel(channel: "beta") })
+                                .buttonStyle(activeChannel == "beta" ? .accent : .glass)
+                            Button(title: "Nightly", action: { setChannel(channel: "nightly") })
+                                .buttonStyle(activeChannel == "nightly" ? .accent : .glass)
+                            Button(title: "Canary", action: { setChannel(channel: "canary") })
+                                .buttonStyle(activeChannel == "canary" ? .accent : .glass)
+                            Spacer()
+                        }
+                    }
+                    .padding(16)
+                }
+                .glassEffect(opacity: glassOpacity, blurRadius: glassBlurRadius, edgeBrightness: 1.15, noise: 0.03)
+                .cornerRadius(12)
+
+                // Systemd Services & Cgroups v2 Supervision
+                Box {
+                    VStack(alignment: .leading, spacing: 14) {
+                        HStack {
+                            Text("Systemd Services & Cgroups v2 Slices")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor("#FFFFFF")
+                            Spacer()
+                            Text("15 Daemons Active")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor("#30D158")
+                        }
+
+                        HStack(spacing: 12) {
+                            Text("Root Slice: daxos.slice | Target: daxos.target")
+                                .font(.system(size: 12))
+                                .foregroundColor("#CBD5E1")
+                            Spacer()
+                            Button(title: "daemon-reload", action: { })
+                                .buttonStyle(.glass)
+                            Button(title: "Audit Slices", action: { })
+                                .buttonStyle(.glass)
+                        }
+
+                        HStack(spacing: 8) {
+                            Text("Core: dap-registryd, dap-sandboxd, dap-updated, drex-boostd, drex-compositor")
+                                .font(.system(size: 11))
+                                .foregroundColor("#94A3B8")
+                        }
+                    }
+                    .padding(16)
+                }
+                .glassEffect(opacity: glassOpacity, blurRadius: glassBlurRadius, edgeBrightness: 1.15, noise: 0.03)
+                .cornerRadius(12)
+
+                // Hardware Governor & DreX-Boost 240Hz
+                Box {
+                    VStack(alignment: .leading, spacing: 14) {
+                        HStack {
+                            Text("Hardware Governor & DreX-Boost")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor("#FFFFFF")
+                            Spacer()
+                            Text("Jitter <= 0.38 ms")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor("#00D2FF")
+                        }
+
+                        HStack(spacing: 10) {
+                            Button(title: "Eco (15W)", action: { })
+                                .buttonStyle(.glass)
+                            Button(title: "Balanced (35W)", action: { })
+                                .buttonStyle(.accent)
+                            Button(title: "Pro (54W)", action: { })
+                                .buttonStyle(.glass)
+                            Button(title: "240Hz Gaming (65W)", action: { })
+                                .buttonStyle(.glass)
+                            Spacer()
+                        }
+                    }
+                    .padding(16)
+                }
+                .glassEffect(opacity: glassOpacity, blurRadius: glassBlurRadius, edgeBrightness: 1.15, noise: 0.03)
+                .cornerRadius(12)
+
+                // Storage, Partitions & Btrfs Subvolumes
+                Box {
+                    VStack(alignment: .leading, spacing: 14) {
+                        HStack {
+                            Text("Storage, Partitions & Btrfs Subvolumes")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor("#FFFFFF")
+                            Spacer()
+                            Text("432.4 GB Free / 512 GB")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor("#30D158")
+                        }
+
+                        HStack(spacing: 12) {
+                            Text("EROFS dm-verity Immutable Root + Btrfs CoW User Home")
+                                .font(.system(size: 12))
+                                .foregroundColor("#CBD5E1")
+                            Spacer()
+                            Button(title: "Purge Caches", action: { })
+                                .buttonStyle(.glass)
+                            Button(title: "Run TRIM", action: { })
+                                .buttonStyle(.glass)
+                            Button(title: "Btrfs Snapshot", action: { })
+                                .buttonStyle(.glass)
+                        }
+                    }
+                    .padding(16)
+                }
+                .glassEffect(opacity: glassOpacity, blurRadius: glassBlurRadius, edgeBrightness: 1.15, noise: 0.03)
+                .cornerRadius(12)
+
+                // Footer Status Message
+                HStack {
+                    Text(statusMessage)
+                        .font(.system(size: 11))
+                        .foregroundColor("#94A3B8")
+                    Spacer()
+                    Button(title: "Apply Changes", action: { })
+                        .buttonStyle(.primary)
+                }
+                .padding(4)
+            }
+            .padding(20)
+        };
+    }
+}

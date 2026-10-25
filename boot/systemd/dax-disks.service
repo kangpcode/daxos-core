@@ -1,0 +1,23 @@
+[Unit]
+Description=DAXOS Storage Automount and SMART Health Monitor Daemon
+Documentation=man:ddisk(1)
+After=local-fs.target dap-registryd.service
+PartOf=daxos.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Slice=daxos-system.slice
+ExecStart=/usr/bin/ddisk list
+StandardOutput=journal
+StandardError=journal
+CapabilityBoundingSet=CAP_SYS_ADMIN CAP_SYS_RAWIO
+AmbientCapabilities=CAP_SYS_ADMIN
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/lib/daxos /tmp /run
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=daxos.target

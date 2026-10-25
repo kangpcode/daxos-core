@@ -1,0 +1,31 @@
+# ==============================================================================
+# DAXOS SYSTEMD SERVICE: UNIVERSAL COMPATIBILITY RUNTIME (dap-compat)
+# File: boot/systemd/dap-compat.service
+# ==============================================================================
+[Unit]
+Description=DAXOS Universal Binary Translation & Compatibility Bridge (Mach-O dyld & Proton-GE NTSync)
+Documentation=file:///home/kangpcode/wwwsite/daxos/docs/FASE_6_BAGIAN_5_WAYLAND_BOOST_TRANSLASI_AB.md
+After=dap-registryd.service dap-sandboxd.service
+Requires=dap-registryd.service
+PartOf=daxos.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Slice=daxos-system.slice
+ExecStart=/usr/bin/dax-run --list-runtimes
+StandardOutput=journal
+StandardError=journal
+
+# Security Isolation & Hardening
+User=root
+Group=root
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/lib/daxos /tmp /run
+CapabilityBoundingSet=CAP_SYS_ADMIN CAP_SYS_PTRACE
+NoNewPrivileges=no
+MemoryDenyWriteExecute=no
+
+[Install]
+WantedBy=daxos.target

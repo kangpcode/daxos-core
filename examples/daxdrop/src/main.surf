@@ -1,0 +1,139 @@
+// ============================================================================
+// DAXOS DAXDROP WIRELESS & AIR-GESTURE SHARING (DaXDrop GUI)
+// File: examples/daxdrop/src/main.surf
+// Language: Surflang 1.0 (Declarative DreXUI Component)
+// ============================================================================
+
+module daxos.daxdrop;
+
+component DaXDropApp: Component {
+    @State var airGestureEnabled: Bool = true;
+    @State var currentHandPose: String = "OpenPalm (Ready for Grab)";
+    @State var selectedDevice: String = "DAXOS Rhino Phone Ultra";
+    @State var transferStatus: String = "Ready to Drop or Clench Fist";
+    @State var encryptionProtocol: String = "ChaCha20-Poly1305 / SHA3-512";
+    @State var opticalCameraSensor: String = "/dev/video0 (Hardware V4L2 60 FPS)";
+    @State var acrylicBlur: Float = 34.0;
+
+    func toggleAirGesture() {
+        airGestureEnabled = !airGestureEnabled;
+    }
+
+    func selectTargetDevice(deviceName: String) {
+        selectedDevice = deviceName;
+        transferStatus = "Target locked: " + deviceName;
+    }
+
+    func body() -> ViewNode {
+        return Card {
+            VStack(spacing: 0) {
+                // Header & Chrome
+                Box {
+                    HStack(spacing: 12) {
+                        HStack(spacing: 6) {
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FF5F56")
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FFBD2E")
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#27C93F")
+                        }
+                        .padding(6)
+
+                        Text("DaXDrop Wireless & Air-Gesture")
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundColor("#FFFFFF")
+
+                        Spacer()
+
+                        Text("Optical Camera: " + opticalCameraSensor)
+                            .font(.system(size: 10))
+                            .foregroundColor("#888899")
+
+                        Button(title: airGestureEnabled ? "Air-Grab Active" : "Air-Grab Off", action: { toggleAirGesture() })
+                            .buttonStyle(airGestureEnabled ? .accent : .glass)
+                    }
+                    .padding(10)
+                }
+                .glassEffect(opacity: 0.85, blurRadius: 20.0, edgeBrightness: 1.1, noise: 0.02)
+
+                // Air Gesture Radar & Hand Tracking Pod
+                Box {
+                    VStack(spacing: 12) {
+                        // Gesture Vision Status Badge
+                        HStack {
+                            Text("Vision Hand Tracking (Kepal Tangan):")
+                                .font(.system(size: 11, weight: .semibold))
+                                .foregroundColor("#A0A0B0")
+                            Text(currentHandPose)
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor("#30D158")
+                            Spacer()
+                            Text(encryptionProtocol)
+                                .font(.monospaced(size: 10))
+                                .foregroundColor("#00D2FF")
+                        }
+
+                        // Nearby Device Radar Grid
+                        HStack(spacing: 16) {
+                            // Device 1: Phone
+                            Box {
+                                VStack(spacing: 6) {
+                                    Box().frame(width: 48, height: 48).cornerRadius(12).backgroundColor("#1E222B")
+                                    Text("Rhino Phone").font(.system(size: 11, weight: .semibold)).foregroundColor("#FFFFFF")
+                                    Text("IP: 192.168.1.185").font(.monospaced(size: 9)).foregroundColor("#888899")
+                                    Text("-38 dBm").font(.system(size: 10)).foregroundColor("#30D158")
+                                    Button(title: "Drop Here", action: { selectTargetDevice(deviceName: "DAXOS Rhino Phone Ultra") })
+                                        .buttonStyle(.glass)
+                                }
+                                .padding(12)
+                            }
+                            .glassEffect(opacity: 0.7, blurRadius: 16.0, edgeBrightness: 1.0, noise: 0.01)
+
+                            // Device 2: Tablet
+                            Box {
+                                VStack(spacing: 6) {
+                                    Box().frame(width: 48, height: 48).cornerRadius(12).backgroundColor("#1E222B")
+                                    Text("MatePad Pro 13").font(.system(size: 11, weight: .semibold)).foregroundColor("#FFFFFF")
+                                    Text("IP: 192.168.1.192").font(.monospaced(size: 9)).foregroundColor("#888899")
+                                    Text("-45 dBm").font(.system(size: 10)).foregroundColor("#30D158")
+                                    Button(title: "Drop Here", action: { selectTargetDevice(deviceName: "DAXOS MatePad Pro 13") })
+                                        .buttonStyle(.glass)
+                                }
+                                .padding(12)
+                            }
+                            .glassEffect(opacity: 0.7, blurRadius: 16.0, edgeBrightness: 1.0, noise: 0.01)
+
+                            // Device 3: Studio Station
+                            Box {
+                                VStack(spacing: 6) {
+                                    Box().frame(width: 48, height: 48).cornerRadius(12).backgroundColor("#1E222B")
+                                    Text("Studio Station").font(.system(size: 11, weight: .semibold)).foregroundColor("#FFFFFF")
+                                    Text("IP: 192.168.1.108").font(.monospaced(size: 9)).foregroundColor("#888899")
+                                    Text("-28 dBm").font(.system(size: 10)).foregroundColor("#30D158")
+                                    Button(title: "Drop Here", action: { selectTargetDevice(deviceName: "Studio Station (Rhino Server)") })
+                                        .buttonStyle(.glass)
+                                }
+                                .padding(12)
+                            }
+                            .glassEffect(opacity: 0.7, blurRadius: 16.0, edgeBrightness: 1.0, noise: 0.01)
+                        }
+                    }
+                    .padding(16)
+                }
+                .glassEffect(opacity: 0.75, blurRadius: acrylicBlur, edgeBrightness: 1.05, noise: 0.02)
+
+                // Drag & Drop / Air-Grab Target Zone
+                Box {
+                    VStack(spacing: 8) {
+                        Text("Drag files here or Clench Fist (Kepal Tangan) in front of camera to Grab & Throw")
+                            .font(.system(size: 12))
+                            .foregroundColor("#CCCCCC")
+                        Text(transferStatus)
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundColor("#0A84FF")
+                    }
+                    .padding(20)
+                }
+                .glassEffect(opacity: 0.65, blurRadius: 16.0, edgeBrightness: 0.95, noise: 0.01)
+            }
+        };
+    }
+}

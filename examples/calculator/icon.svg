@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF9500"/>
+      <stop offset="100%" stop-color="#FF5E3A"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)" filter="url(#shadow)"/>
+  <rect x="22" y="20" width="84" height="26" rx="8" fill="rgba(0,0,0,0.3)"/>
+  <text x="96" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="end">3.14159</text>
+  <!-- Grid buttons -->
+  <circle cx="36" cy="62" r="10" fill="rgba(255,255,255,0.25)"/>
+  <text x="36" y="67" font-size="14" font-weight="700" fill="#FFF" text-anchor="middle">C</text>
+  <circle cx="64" cy="62" r="10" fill="rgba(255,255,255,0.25)"/>
+  <text x="64" y="67" font-size="14" font-weight="700" fill="#FFF" text-anchor="middle">±</text>
+  <circle cx="92" cy="62" r="10" fill="rgba(0,0,0,0.25)"/>
+  <text x="92" y="67" font-size="14" font-weight="700" fill="#FFF" text-anchor="middle">÷</text>
+
+  <circle cx="36" cy="86" r="10" fill="rgba(255,255,255,0.2)"/>
+  <text x="36" y="91" font-size="13" font-weight="600" fill="#FFF" text-anchor="middle">7</text>
+  <circle cx="64" cy="86" r="10" fill="rgba(255,255,255,0.2)"/>
+  <text x="64" y="91" font-size="13" font-weight="600" fill="#FFF" text-anchor="middle">8</text>
+  <circle cx="92" cy="86" r="10" fill="rgba(0,0,0,0.25)"/>
+  <text x="92" y="91" font-size="14" font-weight="700" fill="#FFF" text-anchor="middle">×</text>
+
+  <circle cx="36" cy="108" r="8" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="64" cy="108" r="8" fill="rgba(255,255,255,0.2)"/>
+  <rect x="82" y="100" width="20" height="16" rx="8" fill="#FFFFFF"/>
+  <text x="92" y="112" font-size="13" font-weight="900" fill="#FF5E3A" text-anchor="middle">=</text>
+</svg>

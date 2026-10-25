@@ -1,0 +1,111 @@
+// ============================================================================
+// DAXOS PRO TEXT EDITOR & NOTES (dEdit)
+// File: examples/editor/src/main.surf
+// Language: Surflang 1.0 (Declarative DreXUI Component)
+// ============================================================================
+
+module daxos.editor;
+
+component EditorApp: Component {
+    @State var currentDocument: String = "Untitled.rs";
+    @State var editorContent: String = "fn main() {\n    println!(\"Hello from DAXOS!\");\n}";
+    @State var lineCount: Int = 3;
+    @State var wordCount: Int = 8;
+    @State var charCount: Int = 54;
+    @State var isModified: Bool = false;
+    @State var acrylicBlur: Float = 32.0;
+
+    func onSaveDocument() {
+        isModified = false;
+    }
+
+    func onInsertText(snippet: String) {
+        editorContent = editorContent + snippet;
+        isModified = true;
+    }
+
+    func body() -> ViewNode {
+        return Card {
+            VStack(spacing: 0) {
+                // macOS Chrome & Window Header
+                Box {
+                    HStack(spacing: 12) {
+                        HStack(spacing: 6) {
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FF5F56")
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FFBD2E")
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#27C93F")
+                        }
+                        .padding(6)
+
+                        Text(currentDocument + (isModified ? " *" : ""))
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor("#FFFFFF")
+
+                        Spacer()
+
+                        Button(title: "Save", action: { onSaveDocument() })
+                            .buttonStyle(.accent)
+                        Button(title: "Share", action: { })
+                            .buttonStyle(.glass)
+                    }
+                    .padding(10)
+                }
+                .glassEffect(opacity: 0.85, blurRadius: 20.0, edgeBrightness: 1.1, noise: 0.02)
+
+                // Document Tabs Bar
+                HStack(spacing: 8) {
+                    Button(title: "Untitled.rs", action: { })
+                        .buttonStyle(.tabActive)
+                    Button(title: "main.surf", action: { })
+                        .buttonStyle(.tab)
+                    Button(title: "+ New Tab", action: { })
+                        .buttonStyle(.glass)
+                    Spacer()
+                }
+                .padding(8)
+
+                // Editor Workspace Pane
+                HStack(spacing: 0) {
+                    // Line numbers gutter
+                    Box {
+                        VStack(spacing: 6) {
+                            Text("1").font(.system(size: 12)).foregroundColor("#666677")
+                            Text("2").font(.system(size: 12)).foregroundColor("#666677")
+                            Text("3").font(.system(size: 12)).foregroundColor("#666677")
+                            Spacer()
+                        }
+                        .padding(10)
+                    }
+                    .frame(width: 44)
+                    .glassEffect(opacity: 0.65, blurRadius: 16.0, edgeBrightness: 0.9, noise: 0.0)
+
+                    // Text Buffer
+                    Box {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(editorContent)
+                                .font(.monospaced(size: 13))
+                                .foregroundColor("#E5E9F0")
+                            Spacer()
+                        }
+                        .padding(12)
+                    }
+                    .glassEffect(opacity: 0.8, blurRadius: acrylicBlur, edgeBrightness: 1.0, noise: 0.02)
+                }
+
+                // Status Bar
+                Box {
+                    HStack(spacing: 16) {
+                        Text("UTF-8").font(.system(size: 11)).foregroundColor("#888899")
+                        Text("Rust / Surflang").font(.system(size: 11)).foregroundColor("#888899")
+                        Spacer()
+                        Text("Lines: " + String(lineCount)).font(.system(size: 11)).foregroundColor("#888899")
+                        Text("Words: " + String(wordCount)).font(.system(size: 11)).foregroundColor("#888899")
+                        Text("Chars: " + String(charCount)).font(.system(size: 11)).foregroundColor("#888899")
+                    }
+                    .padding(8)
+                }
+                .glassEffect(opacity: 0.7, blurRadius: 16.0, edgeBrightness: 0.95, noise: 0.01)
+            }
+        };
+    }
+}

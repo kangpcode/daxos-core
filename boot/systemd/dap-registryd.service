@@ -1,0 +1,38 @@
+[Unit]
+Description=DAXOS Central System Registry Daemon (dap-registryd)
+Documentation=file:///home/kangpcode/wwwsite/daxos/docs/FASE_2_BAGIAN_1_ERD_SKEMA_REGISTRY_SQL.md
+DefaultDependencies=no
+After=local-fs.target
+Before=sysinit.target drex-driver.service
+
+[Service]
+Type=notify
+Slice=daxos-system.slice
+ExecStart=/usr/bin/dap-registryd --db-path /var/lib/daxos/registry.db --socket /run/daxos/registry.sock
+Restart=always
+RestartSec=100ms
+TimeoutStopSec=5s
+
+# Security Hardening & Sandboxing
+User=daxos-registry
+Group=daxos-registry
+RuntimeDirectory=daxos
+RuntimeDirectoryMode=0755
+StateDirectory=daxos
+StateDirectoryMode=0700
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+MemoryDenyWriteExecute=yes
+CapabilityBoundingSet=
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=sysinit.target

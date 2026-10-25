@@ -1,0 +1,167 @@
+// ============================================================================
+// DAXOS ACTIVITY MONITOR & TASK MANAGER (dTop GUI)
+// File: examples/sysmon/src/main.surf
+// Language: Surflang 1.0 (Declarative DreXUI Component)
+// Lead Architect: Dhafa Nazula Permadi (@kangpcode)
+// Strictly ZERO EMOJIS - Production Grade
+// ============================================================================
+
+module daxos.sysmon;
+
+component SysmonApp: Component {
+    @State var activeTab: String = "CPU"; // "CPU" | "Memory" | "GPU" | "Network"
+    @State var cpuUsagePct: Float = 14.8;
+    @State var memUsedGb: Float = 6.4;
+    @State var memTotalGb: Float = 16.0;
+    @State var gpuFrametimeMs: Float = 4.16;
+    @State var currentGovernor: String = "extreme-240hz";
+    @State var selectedPid: Int = 1042;
+    @State var acrylicBlur: Float = 34.0;
+
+    func setGovernor(gov: String) {
+        currentGovernor = gov;
+    }
+
+    func forceQuitProcess(pid: Int) {
+        selectedPid = 0;
+    }
+
+    func body() -> ViewNode {
+        return Card {
+            VStack(spacing: 0) {
+                // Header & Chrome
+                Box {
+                    HStack(spacing: 14) {
+                        HStack(spacing: 6) {
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FF5F56")
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#FFBD2E")
+                            Box().frame(width: 12, height: 12).cornerRadius(6).backgroundColor("#27C93F")
+                        }
+                        .padding(6)
+
+                        Text("DAXOS Activity Monitor & Governor (dTop)")
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundColor("#FFFFFF")
+
+                        Spacer()
+
+                        // Governor Badge
+                        Text("[Gov: " + currentGovernor + "]")
+                            .font(.monospaced(size: 11))
+                            .foregroundColor("#30D158")
+
+                        Button(title: "Force Quit", action: { forceQuitProcess(pid: selectedPid) })
+                            .buttonStyle(.danger)
+                    }
+                    .padding(10)
+                }
+                .glassEffect(opacity: 0.85, blurRadius: 20.0, edgeBrightness: 1.1, noise: 0.02)
+
+                // Navigation Tabs
+                HStack(spacing: 8) {
+                    Button(title: "CPU", action: { activeTab = "CPU" })
+                        .buttonStyle(activeTab == "CPU" ? .tabActive : .tab)
+                    Button(title: "Memory", action: { activeTab = "Memory" })
+                        .buttonStyle(activeTab == "Memory" ? .tabActive : .tab)
+                    Button(title: "GPU (DreXVIS)", action: { activeTab = "GPU" })
+                        .buttonStyle(activeTab == "GPU" ? .tabActive : .tab)
+                    Button(title: "Network", action: { activeTab = "Network" })
+                        .buttonStyle(activeTab == "Network" ? .tabActive : .tab)
+                    Spacer()
+                }
+                .padding(8)
+
+                // Metric Cards Grid
+                HStack(spacing: 12) {
+                    Box {
+                        VStack(spacing: 4) {
+                            Text("CPU Usage").font(.system(size: 11, weight: .medium)).foregroundColor("#A0A0B0")
+                            Text(String(cpuUsagePct) + "%").font(.system(size: 22, weight: .bold)).foregroundColor("#00D2FF")
+                            Text("8 Cores @ 4.2 GHz").font(.system(size: 10)).foregroundColor("#707080")
+                        }
+                        .padding(12)
+                    }
+                    .glassEffect(opacity: 0.7, blurRadius: 18.0, edgeBrightness: 1.05, noise: 0.02)
+
+                    Box {
+                        VStack(spacing: 4) {
+                            Text("Physical Memory").font(.system(size: 11, weight: .medium)).foregroundColor("#A0A0B0")
+                            Text(String(memUsedGb) + " / " + String(memTotalGb) + " GB").font(.system(size: 18, weight: .bold)).foregroundColor("#BF5AF2")
+                            Text("ZRAM 2.4x zstd").font(.system(size: 10)).foregroundColor("#707080")
+                        }
+                        .padding(12)
+                    }
+                    .glassEffect(opacity: 0.7, blurRadius: 18.0, edgeBrightness: 1.05, noise: 0.02)
+
+                    Box {
+                        VStack(spacing: 4) {
+                            Text("Compositor Pacing").font(.system(size: 11, weight: .medium)).foregroundColor("#A0A0B0")
+                            Text(String(gpuFrametimeMs) + " ms").font(.system(size: 22, weight: .bold)).foregroundColor("#30D158")
+                            Text("240 Hz ProMotion").font(.system(size: 10)).foregroundColor("#707080")
+                        }
+                        .padding(12)
+                    }
+                    .glassEffect(opacity: 0.7, blurRadius: 18.0, edgeBrightness: 1.05, noise: 0.02)
+                }
+                .padding(12)
+
+                // Active Process List Pane (Table with perfectly aligned fixed-width column cells)
+                Box {
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack {
+                            Box().frame(width: 180).child(Text("Process Name").font(.system(size: 11, weight: .bold)).foregroundColor("#888899"))
+                            Box().frame(width: 60).child(Text("PID").font(.system(size: 11, weight: .bold)).foregroundColor("#888899"))
+                            Box().frame(width: 70).child(Text("CPU %").font(.system(size: 11, weight: .bold)).foregroundColor("#888899"))
+                            Box().frame(width: 90).child(Text("Memory").font(.system(size: 11, weight: .bold)).foregroundColor("#888899"))
+                            Spacer()
+                            Box().frame(width: 120).child(Text("Sandbox / LSM").font(.system(size: 11, weight: .bold)).foregroundColor("#888899"))
+                        }
+                        .padding(8)
+
+                        VStack(spacing: 4) {
+                            HStack {
+                                Box().frame(width: 180).child(Text("drex-compositor").font(.system(size: 12, weight: .semibold)).foregroundColor("#FFFFFF"))
+                                Box().frame(width: 60).child(Text("512").font(.monospaced(size: 11)).foregroundColor("#AAAAAA"))
+                                Box().frame(width: 70).child(Text("2.4%").font(.system(size: 11, weight: .bold)).foregroundColor("#30D158"))
+                                Box().frame(width: 90).child(Text("142 MB").font(.system(size: 11)).foregroundColor("#CCCCCC"))
+                                Spacer()
+                                Box().frame(width: 120).child(Text("[Kernel HAL]").font(.system(size: 10, weight: .bold)).foregroundColor("#0A84FF"))
+                            }
+                            .padding(6)
+                            .backgroundColor(selectedPid == 512 ? "rgba(0,122,255,0.2)" : "transparent")
+                            .cornerRadius(6)
+
+                            HStack {
+                                Box().frame(width: 180).child(Text("daxbro.dapp").font(.system(size: 12, weight: .semibold)).foregroundColor("#FFFFFF"))
+                                Box().frame(width: 60).child(Text("1042").font(.monospaced(size: 11)).foregroundColor("#AAAAAA"))
+                                Box().frame(width: 70).child(Text("4.8%").font(.system(size: 11, weight: .bold)).foregroundColor("#FF9F0A"))
+                                Box().frame(width: 90).child(Text("380 MB").font(.system(size: 11)).foregroundColor("#CCCCCC"))
+                                Spacer()
+                                Box().frame(width: 120).child(Text("[Landlock v5]").font(.system(size: 10, weight: .bold)).foregroundColor("#30D158"))
+                            }
+                            .padding(6)
+                            .backgroundColor(selectedPid == 1042 ? "rgba(0,122,255,0.2)" : "transparent")
+                            .cornerRadius(6)
+
+                            HStack {
+                                Box().frame(width: 180).child(Text("dcodx-ide.dapp").font(.system(size: 12, weight: .semibold)).foregroundColor("#FFFFFF"))
+                                Box().frame(width: 60).child(Text("1208").font(.monospaced(size: 11)).foregroundColor("#AAAAAA"))
+                                Box().frame(width: 70).child(Text("1.2%").font(.system(size: 11, weight: .bold)).foregroundColor("#30D158"))
+                                Box().frame(width: 90).child(Text("210 MB").font(.system(size: 11)).foregroundColor("#CCCCCC"))
+                                Spacer()
+                                Box().frame(width: 120).child(Text("[Landlock v5]").font(.system(size: 10, weight: .bold)).foregroundColor("#30D158"))
+                            }
+                            .padding(6)
+                            .backgroundColor(selectedPid == 1208 ? "rgba(0,122,255,0.2)" : "transparent")
+                            .cornerRadius(6)
+                        }
+
+                        Spacer()
+                    }
+                    .padding(8)
+                }
+                .glassEffect(opacity: 0.8, blurRadius: acrylicBlur, edgeBrightness: 1.0, noise: 0.02)
+            }
+        };
+    }
+}

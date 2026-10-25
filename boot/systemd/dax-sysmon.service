@@ -1,0 +1,24 @@
+[Unit]
+Description=DAXOS Realtime Telemetry and System Monitor Daemon
+Documentation=man:dtop(1)
+After=network.target dap-registryd.service
+PartOf=daxos.target
+
+[Service]
+Type=simple
+Slice=daxos-system.slice
+ExecStart=/usr/bin/dtop --daemon
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+CapabilityBoundingSet=CAP_SYS_RESOURCE CAP_NET_ADMIN CAP_SYS_PTRACE
+AmbientCapabilities=CAP_SYS_RESOURCE
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/lib/daxos /tmp
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=daxos.target

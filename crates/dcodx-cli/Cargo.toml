@@ -1,0 +1,19 @@
+[package]
+name = "dcodx-cli"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dcodx-compiler = { path = "../dcodx-compiler" }
+dcodx-bundle = { path = "../dcodx-bundle" }
+dap-sandboxd = { path = "../dap-sandboxd" }
+dap-registryd = { path = "../dap-registryd" }
+dap-updated = { path = "../dap-updated" }
+drex-boostd = { path = "../drex-boostd" }
+drex-compositor = { path = "../drex-compositor" }
+drex-ui = { path = "../drex-ui" }
+drex-sdk = { path = "../drex-sdk" }
+drexvis = { path = "../drexvis" }
+serde_json = "1.0"
+rand = "0.8"
+ed25519-dalek = { version = "2.1", default-features = false, features = ["fast", "rand_core"] }

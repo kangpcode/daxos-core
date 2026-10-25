@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=Tempat Sampah
+Comment=Pengelolaan Berkas Dihapus & Snapshot Pemulihan
+Exec=dfm --trash
+Icon=org.daxos.trash
+Terminal=false
+Categories=System;Trash;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.trash
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

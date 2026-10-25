@@ -1,0 +1,41 @@
+[application]
+icon = "icon.svg"
+bundle_identifier = "org.daxos.daxbro"
+display_name = "DaXBro"
+version = "1.0.0"
+build_number = 1
+minimum_os_version = "1.0.0"
+
+[developer]
+id = "dev-kangpcode"
+legal_name = "Dhafa Nazula Permadi (DAXOS Core)"
+
+[sandbox]
+enforce = true
+network_isolation = "standard"
+
+[permissions]
+required = [
+    "daxos.permission.NETWORK_SOCKET",
+    "daxos.permission.GPU_ACCELERATION"
+]
+optional = [
+    "daxos.permission.MICROPHONE",
+    "daxos.permission.CAMERA"
+]
+
+[resources]
+max_memory_mb = 2048
+max_cpu_percent = 80
+max_file_descriptors = 4096
+
+[landlock_paths]
+read_write = [
+    "~/Downloads",
+    "~/Library/Containers/org.daxos.daxbro/Data",
+    "/tmp"
+]
+read_only = [
+    "/usr/share/fonts",
+    "/etc/ssl"
+]

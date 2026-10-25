@@ -1,0 +1,137 @@
+// ============================================================================
+// DXDEF — DAXOS DEFENSE & SECURITY CENTER
+// File: examples/dxdef/src/main.surf
+// Language: Surflang 1.0 (Declarative DreXUI Component)
+// Architect: Dhafa Nazula Permadi (@kangpcode)
+// ============================================================================
+
+module daxos.security;
+
+component DxdefApp: Component {
+    @State var systemShieldActive: Bool = true;
+    @State var landlockV5JailsCount: Int = 14;
+    @State var seccompFilterActive: Bool = true;
+    @State var ebpfMonitorEvents: Int = 184209;
+    @State var tpmPcrStatus: String = "PCR 0-7 Sealed & Verified";
+    @State var firewallBlockedCount: Int = 42;
+    @State var memoryProtection: String = "Full ASLR (32-bit entropy) + Shadow Stack";
+
+    func toggleSystemShield() {
+        systemShieldActive = !systemShieldActive;
+    }
+
+    func body() -> ViewNode {
+        return Card {
+            VStack(spacing: 0) {
+                // Header Bar
+                HStack(spacing: 12) {
+                    Text("DXDEF Security Center")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor("#30D158")
+
+                    Spacer()
+
+                    Text(systemShieldActive ? "ALL SHIELDS ARMED" : "SHIELD SUSPENDED")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundColor(systemShieldActive ? "#30D158" : "#FF453A")
+
+                    Button(title: systemShieldActive ? "Disarm" : "Arm Shields", action: { toggleSystemShield() })
+                        .buttonStyle(systemShieldActive ? .destructive : .accent)
+                }
+                .padding(12)
+                .backgroundColor("#141824")
+
+                // Dashboard Grid
+                HStack(spacing: 14) {
+                    // Left Column: Core Sandboxing & Landlock v5
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("KERNEL & HARDWARE ENFORCEMENT")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundColor("#7E7E94")
+
+                        // Landlock v5 Card
+                        Box {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("Landlock v5 Active Sandboxes")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundColor("#FFFFFF")
+                                Text("14 Isolated Applications | 0 File Leak Violations")
+                                    .font(.system(size: 11))
+                                    .foregroundColor("#A0A0B0")
+                                Text("Status: ENFORCING (Kernel Tier 0)")
+                                    .font(.system(size: 10, family: "monospace"))
+                                    .foregroundColor("#30D158")
+                            }
+                            .padding(12)
+                        }
+                        .backgroundColor("#1A1D2E")
+                        .cornerRadius(10)
+
+                        // TPM 2.0 Card
+                        Box {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("TPM 2.0 Root of Trust")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundColor("#FFFFFF")
+                                Text(tpmPcrStatus)
+                                    .font(.system(size: 11))
+                                    .foregroundColor("#A0A0B0")
+                                Text("Hardware Key Sealing: ACTIVE")
+                                    .font(.system(size: 10, family: "monospace"))
+                                    .foregroundColor("#00D2FF")
+                            }
+                            .padding(12)
+                        }
+                        .backgroundColor("#1A1D2E")
+                        .cornerRadius(10)
+                    }
+                    .frame(width: 280)
+
+                    // Right Column: eBPF Telemetry & Live Threats
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("REAL-TIME THREAT TELEMETRY")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundColor("#7E7E94")
+
+                        // eBPF Live Monitor
+                        Box {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("eBPF Ring-Buffer Kernel Monitor")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundColor("#FFFFFF")
+                                Text("Events Monitored: 184,209 syscalls/sec")
+                                    .font(.system(size: 11))
+                                    .foregroundColor("#A0A0B0")
+                                Text("Zero Overhead: 0.002% CPU load")
+                                    .font(.system(size: 10, family: "monospace"))
+                                    .foregroundColor("#30D158")
+                            }
+                            .padding(12)
+                        }
+                        .backgroundColor("#1A1D2E")
+                        .cornerRadius(10)
+
+                        // Firewall & Memory Protection
+                        Box {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("Memory & Network Hardening")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundColor("#FFFFFF")
+                                Text("Blocked Inbound Probes: 42 attacks")
+                                    .font(.system(size: 11))
+                                    .foregroundColor("#A0A0B0")
+                                Text(memoryProtection)
+                                    .font(.system(size: 10, family: "monospace"))
+                                    .foregroundColor("#BF5AF2")
+                            }
+                            .padding(12)
+                        }
+                        .backgroundColor("#1A1D2E")
+                        .cornerRadius(10)
+                    }
+                }
+                .padding(16)
+            }
+        };
+    }
+}

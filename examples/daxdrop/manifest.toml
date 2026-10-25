@@ -1,0 +1,42 @@
+[application]
+icon = "icon.svg"
+bundle_identifier = "org.daxos.daxdrop"
+display_name = "DAXOS DaXDrop & Air-Gesture Sharing"
+version = "1.0.0"
+build_number = 1
+minimum_os_version = "1.0.0"
+
+[developer]
+id = "dev-daxos-core"
+legal_name = "DAXOS Core Engineering Group"
+
+[sandbox]
+enforce = true
+network_isolation = "strict"
+
+[permissions]
+required = [
+    "daxos.permission.CAMERA_HARDWARE",
+    "daxos.permission.NETWORK_SOCKET",
+    "daxos.permission.FILE_SYSTEM_USER",
+    "daxos.permission.GPU_ACCELERATION"
+]
+optional = [
+    "daxos.permission.BLUETOOTH_P2P"
+]
+
+[resources]
+max_memory_mb = 384
+max_cpu_percent = 50
+max_file_descriptors = 512
+
+[landlock_paths]
+read_write = [
+    "~/Library/Containers/org.daxos.daxdrop/Data",
+    "~/Downloads",
+    "/tmp"
+]
+read_only = [
+    "/sys/class/video4linux",
+    "/usr/share/fonts"
+]

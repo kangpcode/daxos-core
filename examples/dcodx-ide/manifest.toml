@@ -1,0 +1,40 @@
+[application]
+icon = "icon.svg"
+bundle_identifier = "org.daxos.dcodx.ide"
+display_name = "DCODX IDE"
+version = "1.0.0"
+build_number = 1
+minimum_os_version = "1.0.0"
+
+[developer]
+id = "dev-kangpcode"
+legal_name = "Dhafa Nazula Permadi (DAXOS Core)"
+
+[sandbox]
+enforce = false
+network_isolation = "standard"
+
+[permissions]
+required = [
+    "daxos.permission.FILE_SYSTEM_USER",
+    "daxos.permission.PROCESS_MANAGEMENT",
+    "daxos.permission.GPU_ACCELERATION"
+]
+optional = [
+    "daxos.permission.NETWORK_SOCKET"
+]
+
+[resources]
+max_memory_mb = 4096
+max_cpu_percent = 100
+max_file_descriptors = 16384
+
+[landlock_paths]
+read_write = [
+    "~",
+    "/tmp"
+]
+read_only = [
+    "/usr",
+    "/etc"
+]

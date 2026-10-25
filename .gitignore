@@ -1,0 +1,10 @@
+/CLAUDE.md
+/docs
+/tests
+/web-dapstore
+/web-daxcloud
+target/
+*.surf.ll
+*.dbpp
+*.dapp
+*.iso

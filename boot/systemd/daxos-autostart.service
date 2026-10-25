@@ -1,0 +1,16 @@
+[Unit]
+Description=DAXOS Boot Autostart Application Launcher
+Documentation=man:daxos-autostart(1)
+After=drex-compositor.service dap-registryd.service duraserv.service
+PartOf=daxos.target
+
+[Service]
+Type=oneshot
+Slice=daxos-apps.slice
+ExecStart=/usr/local/bin/daxos-autostart-manager.sh --exec
+RemainAfterExit=yes
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=daxos.target

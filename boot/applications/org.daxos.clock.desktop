@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=DaxClock World & Timer
+Comment=Jam Dunia, Alarm, Stopwatch & Countdown
+Exec=dclock
+Icon=org.daxos.clock
+Terminal=false
+Categories=Utility;Clock;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.clock
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

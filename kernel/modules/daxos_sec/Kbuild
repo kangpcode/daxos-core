@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-only
+obj-m += daxos_sec.o
+daxos_sec-y := daxos_security.o
+ccflags-y += -I$(src)/../../include

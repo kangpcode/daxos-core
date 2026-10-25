@@ -1,0 +1,18 @@
+# ==============================================================================
+# DAXOS SYSTEMD CGROUP V2 DRIVERS & SUPERVISOR SLICE
+# File: boot/systemd/daxos-drivers.slice
+# ==============================================================================
+[Unit]
+Description=DAXOS DreX-Driver User-Space Supervisor & GPU Slice
+Documentation=file:///home/kangpcode/wwwsite/daxos/docs/FASE_4_BAGIAN_3_DREXVIS_DRIVER_ABSTRACTION.md
+PartOf=daxos.slice
+Before=slices.target
+
+[Slice]
+CPUAccounting=yes
+MemoryAccounting=yes
+IOAccounting=yes
+TasksAccounting=yes
+CPUWeight=800
+IOWeight=800
+TasksMax=8192

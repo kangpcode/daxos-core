@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=System Settings
+Comment=Pusat Konfigurasi Sistem, Hardware & Systemd
+Exec=daxsh -c 'service list'
+Icon=org.daxos.preferences
+Terminal=false
+Categories=Settings;DesktopSettings;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.preferences
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

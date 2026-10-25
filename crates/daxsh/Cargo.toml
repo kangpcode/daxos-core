@@ -1,0 +1,18 @@
+[package]
+name = "daxsh"
+version = "1.10.2026"
+edition = "2021"
+description = "DAXOS Interactive Shell — POSIX compatible with rich built-in OS commands"
+
+[[bin]]
+name = "daxsh"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+dax-pkg = { path = "../dax-pkg" }
+dap-compat = { path = "../dap-compat" }
+daxdrop = { path = "../daxdrop" }
+dax-audiod = { path = "../dax-audiod" }

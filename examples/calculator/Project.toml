@@ -1,0 +1,10 @@
+[project]
+name = "calculator"
+version = "1.0.0"
+authors = ["DAXOS Core Team <dev@daxos.org>"]
+entry = "src/main.surf"
+
+[compiler]
+target = "universal"
+optimization_level = 3
+affine_checker = true

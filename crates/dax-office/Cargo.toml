@@ -1,0 +1,15 @@
+[package]
+name = "dax-office"
+version = "1.10.2026"
+edition = "2021"
+authors = ["Dhafa Nazula Permadi <kangpcode>"]
+description = "DAXOS Office Productivity Suite — DaxWord, DaxSheet & DaxSlide Engine"
+
+[[bin]]
+name = "doffice"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+

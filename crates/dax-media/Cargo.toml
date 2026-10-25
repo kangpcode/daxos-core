@@ -1,0 +1,15 @@
+[package]
+name = "dax-media"
+version = "1.10.2026"
+edition = "2021"
+authors = ["Dhafa Nazula Permadi <kangpcode>"]
+description = "High Performance Default Media Player Suite (Video, Audio & Photos) for DAXOS"
+
+[[bin]]
+name = "dmedia"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+

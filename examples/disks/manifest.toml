@@ -1,0 +1,42 @@
+[application]
+icon = "icon.svg"
+bundle_identifier = "org.daxos.disks"
+display_name = "DAXOS Disk Utility & Storage Manager"
+version = "1.0.0"
+build_number = 1
+minimum_os_version = "1.0.0"
+
+[developer]
+id = "dev-daxos-core"
+legal_name = "DAXOS Core Engineering Group"
+
+[sandbox]
+enforce = true
+network_isolation = "strict"
+
+[permissions]
+required = [
+    "daxos.permission.STORAGE_MANAGEMENT",
+    "daxos.permission.BLOCK_DEVICE_ACCESS",
+    "daxos.permission.GPU_ACCELERATION"
+]
+optional = [
+    "daxos.permission.EXTERNAL_STORAGE"
+]
+
+[resources]
+max_memory_mb = 256
+max_cpu_percent = 50
+max_file_descriptors = 512
+
+[landlock_paths]
+read_write = [
+    "~/Library/Containers/org.daxos.disks/Data",
+    "/tmp"
+]
+read_only = [
+    "/proc/partitions",
+    "/proc/mounts",
+    "/sys/block",
+    "/usr/share/fonts"
+]

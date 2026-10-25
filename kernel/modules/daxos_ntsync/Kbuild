@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0-only
+# DAXOS ntsync Kbuild
+obj-m += daxos_ntsync.o
+daxos_ntsync-y := ntsync.o
+ccflags-y += -I$(src)/../../include

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=Disk Utility
+Comment=Manajer Partisi GPT, Format Btrfs & Pemantau SMART
+Exec=ddisk
+Icon=org.daxos.disks
+Terminal=false
+Categories=System;Filesystem;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.disks
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026

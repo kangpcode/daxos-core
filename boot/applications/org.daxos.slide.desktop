@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=DaxSlide Presentation Pro
+Comment=Presentasi & Slide Pitch Deck Kreatif
+Exec=doffice slide
+Icon=org.daxos.slide
+Terminal=false
+Categories=Office;Presentation;
+StartupNotify=true
+X-DAXOS-BundleID=org.daxos.slide
+X-DAXOS-Sandboxed=true
+X-DAXOS-Version=1.10.2026
