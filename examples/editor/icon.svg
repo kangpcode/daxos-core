@@ -1,16 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3B82F6"/>
-      <stop offset="100%" stop-color="#1D4ED8"/>
-    </linearGradient>
-  </defs>
-  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
-  <path d="M32 24 H76 L96 44 V100 C96 104 92 108 88 108 H32 C28 108 24 104 24 100 V32 C24 28 28 24 32 24 Z" fill="#FFFFFF"/>
-  <path d="M76 24 V44 H96 Z" fill="#93C5FD"/>
-  <!-- Code lines -->
-  <line x1="38" y1="52" x2="68" y2="52" stroke="#2563EB" stroke-width="4" stroke-linecap="round"/>
-  <line x1="38" y1="66" x2="82" y2="66" stroke="#64748B" stroke-width="4" stroke-linecap="round"/>
-  <line x1="38" y1="80" x2="74" y2="80" stroke="#F59E0B" stroke-width="4" stroke-linecap="round"/>
-  <line x1="38" y1="94" x2="58" y2="94" stroke="#10B981" stroke-width="4" stroke-linecap="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><defs><linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#3B82F6"/><stop offset="100%" stop-color="#1D4ED8"/></linearGradient></defs><rect width="128" height="128" fill="url(#bg)" rx="28"/><path fill="#FFF" d="M32 24 H76 L96 44 V100 C96 104 92 108 88 108 H32 C28 108 24 104 24 100 V32 C24 28 28 24 32 24 Z"/><path fill="#93C5FD" d="M76 24 V44 H96 Z"/><line x1="38" x2="68" y1="52" y2="52" stroke="#2563EB" stroke-linecap="round" stroke-width="4"/><line x1="38" x2="82" y1="66" y2="66" stroke="#64748B" stroke-linecap="round" stroke-width="4"/><line x1="38" x2="74" y1="80" y2="80" stroke="#F59E0B" stroke-linecap="round" stroke-width="4"/><line x1="38" x2="58" y1="94" y2="94" stroke="#10B981" stroke-linecap="round" stroke-width="4"/></svg>

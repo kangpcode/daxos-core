@@ -1,16 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#18181B"/>
-      <stop offset="100%" stop-color="#09090B"/>
-    </linearGradient>
-  </defs>
-  <rect width="128" height="128" rx="28" fill="url(#bg)" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
-  <rect x="20" y="24" width="88" height="16" rx="4" fill="#27272A"/>
-  <circle cx="28" cy="32" r="3" fill="#EF4444"/>
-  <circle cx="37" cy="32" r="3" fill="#F59E0B"/>
-  <circle cx="46" cy="32" r="3" fill="#10B981"/>
-  <!-- Prompt -->
-  <polyline points="32 58 46 70 32 82" fill="none" stroke="#10B981" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <line x1="54" y1="82" x2="74" y2="82" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><defs><linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#18181B"/><stop offset="100%" stop-color="#09090B"/></linearGradient></defs><rect width="128" height="128" fill="url(#bg)" stroke="rgba(255,255,255,0.15)" stroke-width="2" rx="28"/><rect width="88" height="16" x="20" y="24" fill="#27272A" rx="4"/><circle cx="28" cy="32" r="3" fill="#EF4444"/><circle cx="37" cy="32" r="3" fill="#F59E0B"/><circle cx="46" cy="32" r="3" fill="#10B981"/><polyline fill="none" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.5" points="32 58 46 70 32 82"/><line x1="54" x2="74" y1="82" y2="82" stroke="#FFF" stroke-linecap="round" stroke-width="4.5"/></svg>

@@ -1,16 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#EF4444"/>
-      <stop offset="100%" stop-color="#991B1B"/>
-    </linearGradient>
-  </defs>
-  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
-  <rect x="20" y="24" width="88" height="80" rx="12" fill="#0B0F17" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-  <!-- Grid -->
-  <line x1="20" y1="44" x2="108" y2="44" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-  <line x1="20" y1="64" x2="108" y2="64" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-  <line x1="20" y1="84" x2="108" y2="84" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-  <!-- Pulse wave -->
-  <polyline points="24,64 42,64 50,38 60,90 70,50 78,74 86,64 104,64" fill="none" stroke="#22C55E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><defs><linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#EF4444"/><stop offset="100%" stop-color="#991B1B"/></linearGradient></defs><rect width="128" height="128" fill="url(#bg)" rx="28"/><rect width="88" height="80" x="20" y="24" fill="#0B0F17" stroke="rgba(255,255,255,0.2)" stroke-width="2" rx="12"/><line x1="20" x2="108" y1="44" y2="44" stroke="rgba(255,255,255,0.1)" stroke-width="1"/><line x1="20" x2="108" y1="64" y2="64" stroke="rgba(255,255,255,0.1)" stroke-width="1"/><line x1="20" x2="108" y1="84" y2="84" stroke="rgba(255,255,255,0.1)" stroke-width="1"/><polyline fill="none" stroke="#22C55E" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" points="24 64 42 64 50 38 60 90 70 50 78 74 86 64 104 64"/></svg>

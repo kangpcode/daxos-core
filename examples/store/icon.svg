@@ -1,14 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F97316"/>
-      <stop offset="100%" stop-color="#C2410C"/>
-    </linearGradient>
-  </defs>
-  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
-  <!-- Bag with A logo -->
-  <path d="M44 44 C44 32 52 24 64 24 C76 24 84 32 84 44" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
-  <rect x="28" y="44" width="72" height="64" rx="14" fill="#FFFFFF"/>
-  <polygon points="64,56 78,88 50,88" fill="#F97316"/>
-  <circle cx="64" cy="74" r="5" fill="#FFFFFF"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><defs><linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#F97316"/><stop offset="100%" stop-color="#C2410C"/></linearGradient></defs><rect width="128" height="128" fill="url(#bg)" rx="28"/><path fill="none" stroke="#FFF" stroke-linecap="round" stroke-width="6" d="M44 44 C44 32 52 24 64 24 C76 24 84 32 84 44"/><rect width="72" height="64" x="28" y="44" fill="#FFF" rx="14"/><polygon fill="#F97316" points="64 56 78 88 50 88"/><circle cx="64" cy="74" r="5" fill="#FFF"/></svg>
